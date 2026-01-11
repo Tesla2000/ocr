@@ -1,0 +1,19 @@
+[project]
+name = "ocr"
+version = "0.1.0"
+description = "Runs OCR of a book pages"
+authors = [{name = "Tesla2000", email = "fratajczak124@gmail.com"}]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pre-commit>=3.7.1",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.8.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ocr"]
