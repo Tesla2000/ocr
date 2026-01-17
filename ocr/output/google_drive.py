@@ -1,0 +1,59 @@
+from collections.abc import Collection
+from io import BytesIO
+from pathlib import Path
+from typing import Annotated
+from typing import Any
+from typing import Literal
+
+from google.oauth2.service_account import Credentials
+from ocr.models import OCRResult
+from ocr.output._base import Output
+from pydantic import AfterValidator
+
+
+def _validate_credentials_path(path: Path) -> Path:
+    if not path.exists():
+        raise ValueError(f"Credentials file does not exist: {path}")
+    if not path.is_file():
+        raise ValueError(f"Credentials path is not a file: {path}")
+    return path
+
+
+class GoogleDriveOutput(Output):
+    type: Literal["google-drive"] = "google-drive"
+    credentials_path: Annotated[
+        Path, AfterValidator(_validate_credentials_path)
+    ]
+    folder_id: str
+    filename: str
+    _service: Any = None
+
+    def model_post_init(self, context: Any, /) -> None:
+        from googleapiclient.discovery import build
+
+        credentials = Credentials.from_service_account_file(
+            str(self.credentials_path),
+            scopes=["https://www.googleapis.com/auth/drive.file"],
+        )
+        self._service = build("drive", "v3", credentials=credentials)
+
+    def save_results(self, results: Collection[OCRResult]) -> None:
+        from googleapiclient.http import MediaIoBaseUpload
+
+        content = "\n".join(
+            result.extracted_text for result in results if result.success
+        )
+        file_metadata = {
+            "name": self.filename,
+            "parents": [self.folder_id],
+        }
+        media = MediaIoBaseUpload(
+            BytesIO(content.encode("utf-8")),
+            mimetype="text/plain",
+            resumable=True,
+        )
+        self._service.files().create(
+            body=file_metadata,
+            media_body=media,
+            fields="id",
+        ).execute()

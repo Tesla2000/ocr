@@ -1,25 +1,29 @@
 import asyncio
+from asyncio import Semaphore
 from collections.abc import Sequence
 
 from ocr.models import ImageFile
 from ocr.models import OCRResult
-from ocr.services.vision_client import VisionClient
+from ocr.vision_client import VisionClient
 from pydantic import BaseModel
+from pydantic import PositiveInt
 
 
 class TextExtractor(BaseModel):
     vision_client: VisionClient
+    n_tasks: PositiveInt = 12
     return_exceptions: bool = False
 
     async def extract_from_images(
         self, images: Sequence[ImageFile]
     ) -> tuple[OCRResult, ...]:
         tasks = [self._extract_single(image) for image in images]
-        results = tuple(
-            await asyncio.gather(
-                *tasks, return_exceptions=self.return_exceptions
+        async with Semaphore(self.n_tasks):
+            results = tuple(
+                await asyncio.gather(
+                    *tasks, return_exceptions=self.return_exceptions
+                )
             )
-        )
         if self.return_exceptions:
             results = tuple(
                 (

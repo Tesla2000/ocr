@@ -3,14 +3,14 @@ from pathlib import Path
 from typing import Literal
 
 from ocr.models import OCRResult
-from ocr.services.writers._writer import Writer
+from ocr.output._base import Output
 
 
-class SeparateWriter(Writer):
+class SeparateOutput(Output):
     type: Literal["separate"] = "separate"
     output_directory: Path
 
-    def write_results(self, results: Iterable[OCRResult]) -> None:
+    def save_results(self, results: Iterable[OCRResult]) -> None:
         self.output_directory.mkdir(parents=True, exist_ok=True)
         for result in results:
             if not result.success:

@@ -1,6 +1,6 @@
-from ocr.services.image_finder import ImageFinder
-from ocr.services.text_extractor import TextExtractor
-from ocr.services.writers import AnyWriter
+from ocr.input import AnyInput
+from ocr.output import AnyOutput
+from ocr.text_extractor import TextExtractor
 from pydantic_settings import BaseSettings
 from pydantic_settings import CliApp
 from pydantic_settings import SettingsConfigDict
@@ -15,16 +15,16 @@ class OCR(BaseSettings):
         cli_ignore_unknown_args=False,
     )
 
-    image_finder: ImageFinder
+    input: AnyInput
     text_extractor: TextExtractor
-    file_writer: AnyWriter
+    output: AnyOutput
 
     async def cli_cmd(self) -> None:
-        images = self.image_finder.find_images()
+        images = self.input.get_images()
         if not images:
             return
         results = await self.text_extractor.extract_from_images(images)
-        self.file_writer.write_results(results)
+        self.output.save_results(results)
 
 
 if __name__ == "__main__":

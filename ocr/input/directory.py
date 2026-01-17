@@ -1,9 +1,11 @@
+import os.path
 from pathlib import Path
 from typing import Annotated
+from typing import Literal
 
+from ocr.input._base import Input
 from ocr.models import ImageFile
 from pydantic import AfterValidator
-from pydantic import BaseModel
 
 
 def _validate_path(path: Path) -> Path:
@@ -14,21 +16,19 @@ def _validate_path(path: Path) -> Path:
     return path
 
 
-class ImageFinder(BaseModel):
+class DirectoryInput(Input):
+    type: Literal["directory"] = "directory"
     input_directory: Annotated[Path, AfterValidator(_validate_path)]
-    supported_extensions: tuple[str, ...] = (
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".bmp",
-        ".tiff",
-        ".tif",
-        ".webp",
-    )
 
-    def find_images(self) -> tuple[ImageFile, ...]:
+    def get_images(self) -> tuple[ImageFile, ...]:
         return tuple(
             ImageFile(path=file_path)
-            for file_path in self.input_directory.iterdir()
-            if file_path.suffix.lower() in self.supported_extensions
+            for file_path in sorted(
+                (
+                    file_path
+                    for file_path in self.input_directory.iterdir()
+                    if file_path.suffix.lower() in self.supported_extensions
+                ),
+                key=os.path.getmtime,
+            )
         )
