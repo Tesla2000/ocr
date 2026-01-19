@@ -2,7 +2,7 @@ from abc import ABC
 from abc import abstractmethod
 from collections.abc import Collection
 
-from ocr.models import OCRResult
+from ocr.text_cleanup import TextCleanup
 from pydantic import BaseModel
 from pydantic import ConfigDict
 
@@ -10,7 +10,8 @@ from pydantic import ConfigDict
 class Output(ABC, BaseModel):
     model_config = ConfigDict(extra="forbid")
     type: str
+    text_cleanup: TextCleanup
 
     @abstractmethod
-    def save_results(self, results: Collection[OCRResult]) -> None:
+    async def save_results(self, results: Collection[str]) -> None:
         pass

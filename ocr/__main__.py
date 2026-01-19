@@ -10,6 +10,7 @@ class OCR(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
+        env_nested_delimiter="__",
         cli_parse_args=True,
         cli_kebab_case=True,
         cli_ignore_unknown_args=False,
@@ -24,7 +25,7 @@ class OCR(BaseSettings):
         if not images:
             return
         results = await self.text_extractor.extract_from_images(images)
-        self.output.save_results(results)
+        await self.output.save_results(results)
 
 
 if __name__ == "__main__":

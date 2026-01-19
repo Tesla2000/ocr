@@ -6,7 +6,6 @@ from typing import Any
 from typing import Literal
 
 from google.oauth2.service_account import Credentials
-from ocr.models import OCRResult
 from ocr.output._base import Output
 from pydantic import AfterValidator
 
@@ -37,12 +36,10 @@ class GoogleDriveOutput(Output):
         )
         self._service = build("drive", "v3", credentials=credentials)
 
-    def save_results(self, results: Collection[OCRResult]) -> None:
+    async def save_results(self, results: Collection[str]) -> None:
         from googleapiclient.http import MediaIoBaseUpload
 
-        content = "\n".join(
-            result.extracted_text for result in results if result.success
-        )
+        content = "\n".join(results)
         file_metadata = {
             "name": self.filename,
             "parents": [self.folder_id],

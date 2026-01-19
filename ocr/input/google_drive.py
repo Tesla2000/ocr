@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 
 from google.oauth2.service_account import Credentials
 from ocr.input._base import Input
-from ocr.models import ImageFile
 from pydantic import AfterValidator
 
 if TYPE_CHECKING:
@@ -40,7 +39,7 @@ class GoogleDriveInput(Input):
         )
         self._service = build("drive", "v3", credentials=credentials)
 
-    def get_images(self) -> tuple[ImageFile, ...]:
+    def get_images(self) -> tuple[Path, ...]:
         from googleapiclient.http import MediaIoBaseDownload
 
         query = f"'{self.folder_id}' in parents and trashed=false"
@@ -67,5 +66,5 @@ class GoogleDriveInput(Input):
                 done = False
                 while not done:
                     _, done = downloader.next_chunk()
-            image_files.append(ImageFile(path=file_path))
+            image_files.append(file_path)
         return tuple(image_files)

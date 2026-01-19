@@ -4,7 +4,6 @@ from typing import Annotated
 from typing import Literal
 
 from ocr.input._base import Input
-from ocr.models import ImageFile
 from pydantic import AfterValidator
 
 
@@ -20,9 +19,9 @@ class DirectoryInput(Input):
     type: Literal["directory"] = "directory"
     input_directory: Annotated[Path, AfterValidator(_validate_path)]
 
-    def get_images(self) -> tuple[ImageFile, ...]:
+    def get_images(self) -> tuple[Path, ...]:
         return tuple(
-            ImageFile(path=file_path)
+            file_path
             for file_path in sorted(
                 (
                     file_path

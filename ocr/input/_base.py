@@ -1,7 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
+from pathlib import Path
 
-from ocr.models import ImageFile
 from pydantic import BaseModel
 from pydantic import ConfigDict
 
@@ -20,5 +20,5 @@ class Input(BaseModel, ABC):
     )
 
     @abstractmethod
-    def get_images(self) -> tuple[ImageFile, ...]:
+    def get_images(self) -> tuple[Path, ...]:
         pass
