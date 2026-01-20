@@ -4,15 +4,19 @@ from langchain_core.messages import HumanMessage
 from langchain_core.messages import SystemMessage
 from ocr.output.transfomations.transformation import Transformation
 from pydantic import Field
+from pydantic import PositiveFloat
 from pydantic import SecretStr
 
 
 class LLMCleanup(Transformation):
     type: Literal["llm-cleanup"] = "llm-cleanup"
     openai_api_key: SecretStr
+    timeout: PositiveFloat = 30.0
     client: "ChatOpenAI" = Field(
         default_factory=lambda validated_data: ChatOpenAI(
-            model="gpt-4.1-mini", api_key=validated_data.get("openai_api_key")
+            model="gpt-4.1-mini",
+            api_key=validated_data.get("openai_api_key"),
+            timeout=validated_data.get("timeout"),
         )
     )
     system_prompt: str = """You are a text cleanup assistant. Your task is to:
@@ -49,7 +53,7 @@ Za każdym razem, kiedy to sobie uświadamiasz - a może nawet wtedy
 kiedy sobie nie uświadamiasz - w twoim mózgu dokonują się
 operacie mające utrzymywać i aktualizować odpowiedzi
 ważnych pytań: Czy dzieje się coś nowego? Czy coś mi grozi? Czy
-wszystko w porzadku? Czy nie trzeba zwrócić uwagi na coś innego?
+wszystko w porządku? Czy nie trzeba zwrócić uwagi na coś innego?
     """
 
     async def transform(self, text: str) -> str:
