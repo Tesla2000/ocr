@@ -39,7 +39,7 @@ class GoogleDriveOutput(Output):
     async def save_results(self, results: Collection[str]) -> None:
         from googleapiclient.http import MediaIoBaseUpload
 
-        content = "\n".join(results)
+        content = await self._apply_transformations("\n".join(results))
         file_metadata = {
             "name": self.filename,
             "parents": [self.folder_id],

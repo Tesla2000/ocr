@@ -1,18 +1,18 @@
-from typing import Optional
+from typing import Literal
 
 from langchain_core.messages import HumanMessage
 from langchain_core.messages import SystemMessage
-from langchain_openai import ChatOpenAI
-from pydantic import BaseModel
+from ocr.output.transfomations.transformation import Transformation
 from pydantic import Field
 from pydantic import SecretStr
 
 
-class TextCleanup(BaseModel):
-    openai_api_key: Optional[SecretStr] = None
-    client: ChatOpenAI = Field(
+class LLMCleanup(Transformation):
+    type: Literal["llm-cleanup"] = "llm-cleanup"
+    openai_api_key: SecretStr
+    client: "ChatOpenAI" = Field(
         default_factory=lambda validated_data: ChatOpenAI(
-            model="gpt-4.1-mini", api_key=validated_data["openai_api_key"]
+            model="gpt-4.1-mini", api_key=validated_data.get("openai_api_key")
         )
     )
     system_prompt: str = """You are a text cleanup assistant. Your task is to:
@@ -52,10 +52,18 @@ ważnych pytań: Czy dzieje się coś nowego? Czy coś mi grozi? Czy
 wszystko w porzadku? Czy nie trzeba zwrócić uwagi na coś innego?
     """
 
-    async def cleanup_text(self, text: str) -> str:
+    async def transform(self, text: str) -> str:
         messages = [
             SystemMessage(content=self.system_prompt),
             HumanMessage(content=text),
         ]
         response = await self.client.ainvoke(messages)
         return response.content
+
+
+try:
+    from langchain_openai import ChatOpenAI
+
+    LLMCleanup.model_rebuild()
+except ImportError:
+    pass

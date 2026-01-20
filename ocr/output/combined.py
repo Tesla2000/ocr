@@ -10,7 +10,7 @@ class CombinedOutput(Output):
     file: Path
 
     async def save_results(self, results: Iterable[str]) -> None:
-        combined_text = "\n".join(results)
-        cleaned_text = await self.text_cleanup.cleanup_text(combined_text)
         self.file.parent.mkdir(exist_ok=True, parents=True)
-        self.file.write_text(cleaned_text)
+        self.file.write_text(
+            await self._apply_transformations("\n".join(results))
+        )

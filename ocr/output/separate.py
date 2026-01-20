@@ -15,4 +15,6 @@ class SeparateOutput(Output):
             output_path = (self.output_directory / str(index)).with_suffix(
                 ".txt"
             )
-            output_path.write_text(result, encoding="utf-8")
+            output_path.write_text(
+                await self._apply_transformations(result), encoding="utf-8"
+            )
