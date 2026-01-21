@@ -25,7 +25,7 @@ google-drive = [
     "google-api-python-client>=2.188.0",
 ]
 llm-cleanup = [
-    "langchain-openai>=1.1.7",
+    "openai>=2.15.0",
 ]
 sylable-splitting = [
     "pyphen>=0.17.2",

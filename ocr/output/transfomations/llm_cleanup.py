@@ -1,9 +1,8 @@
+from typing import Any
 from typing import Literal
 
-from langchain_core.messages import HumanMessage
-from langchain_core.messages import SystemMessage
 from ocr.output.transfomations.transformation import Transformation
-from pydantic import Field
+from openai import AsyncOpenAI
 from pydantic import PositiveFloat
 from pydantic import SecretStr
 
@@ -11,14 +10,16 @@ from pydantic import SecretStr
 class LLMCleanup(Transformation):
     type: Literal["llm-cleanup"] = "llm-cleanup"
     openai_api_key: SecretStr
+    model: str = "gpt-4.1-nano"
     timeout: PositiveFloat = 30.0
-    client: "ChatOpenAI" = Field(
-        default_factory=lambda validated_data: ChatOpenAI(
-            model="gpt-4.1-mini",
-            api_key=validated_data.get("openai_api_key"),
-            timeout=validated_data.get("timeout"),
+    _client: AsyncOpenAI
+
+    def model_post_init(self, context: Any, /) -> None:
+        self._client = AsyncOpenAI(
+            api_key=self.openai_api_key.get_secret_value(),
+            timeout=self.timeout,
         )
-    )
+
     system_prompt: str = """You are a text cleanup assistant. Your task is to:
 1. Fix OCR mistakes and typos
 2. Remove page numbers
@@ -57,17 +58,16 @@ wszystko w porządku? Czy nie trzeba zwrócić uwagi na coś innego?
     """
 
     async def transform(self, text: str) -> str:
-        messages = [
-            SystemMessage(content=self.system_prompt),
-            HumanMessage(content=text),
-        ]
-        response = await self.client.ainvoke(messages)
-        return response.content
-
-
-try:
-    from langchain_openai import ChatOpenAI
-
-    LLMCleanup.model_rebuild()
-except ImportError:
-    pass
+        stream = await self._client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": text},
+            ],
+            stream=True,
+        )
+        chunks = []
+        async for chunk in stream:
+            if chunk.choices[0].delta.content:
+                chunks.append(chunk.choices[0].delta.content)
+        return "".join(chunks)
