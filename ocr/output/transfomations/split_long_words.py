@@ -1,4 +1,10 @@
 import re
+import sys
+from collections.abc import Collection
+from collections.abc import Generator
+from collections.abc import Sequence
+from itertools import combinations
+from itertools import count
 from typing import Literal
 from typing import TYPE_CHECKING
 
@@ -49,23 +55,43 @@ class SplitLongWords(Transformation):
     def _group_syllables(self, syllables: tuple[str, ...]) -> tuple[str, ...]:
         if len(syllables) <= 1:
             return syllables
-        total_length = sum(len(s) for s in syllables)
-        if total_length <= self.max_syllable_group_length:
+        if sum(map(len, syllables)) <= self.max_syllable_group_length:
             return ("".join(syllables),)
-        num_groups = (
-            total_length + self.max_syllable_group_length - 1
-        ) // self.max_syllable_group_length
-        target_size = total_length / num_groups
-        groups = []
-        current_group = []
-        current_length = 0
-        for syllable in syllables:
-            current_group.append(syllable)
-            current_length += len(syllable)
-            if current_length >= target_size and len(groups) < num_groups - 1:
-                groups.append("".join(current_group))
-                current_group = []
-                current_length = 0
-        if current_group:
-            groups.append("".join(current_group))
-        return tuple(groups)
+
+        def get_longest_group(borders: Collection[int]) -> int:
+            max_length = 0
+            for syllable_group in self._borders_to_syllables(
+                borders, syllables
+            ):
+                max_length = max(max_length, sum(map(len, syllable_group)))
+            return max_length
+
+        for n_groups in count(2):
+            best_borders = min(
+                combinations(range(len(syllables) - 1), n_groups - 1),
+                key=get_longest_group,
+            )
+            if (
+                get_longest_group(best_borders)
+                <= self.max_syllable_group_length
+            ):
+                break
+        return tuple(
+            map("".join, self._borders_to_syllables(best_borders, syllables))
+        )
+
+    @staticmethod
+    def _borders_to_syllables(
+        borders: Collection[int], syllables: Sequence[str]
+    ) -> Generator[list[str], None, None]:
+        ordered_borders = iter(sorted(borders))
+        next_border = next(ordered_borders) + 0.5
+        syllable_group = []
+        for index, syllable in enumerate(syllables):
+            if index < next_border:
+                syllable_group.append(syllable)
+                continue
+            yield syllable_group
+            syllable_group = [syllable]
+            next_border = next(ordered_borders, sys.maxsize) + 0.5
+        yield syllable_group
