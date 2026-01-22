@@ -1,3 +1,11 @@
+from logging import CRITICAL
+from logging import DEBUG
+from logging import ERROR
+from logging import getLogger
+from logging import INFO
+from logging import Logger
+from logging import NOTSET
+from logging import WARNING
 from typing import Any
 from typing import Literal
 
@@ -12,13 +20,19 @@ class LLMCleanup(Transformation):
     openai_api_key: SecretStr
     model: str = "gpt-4.1-nano"
     timeout: PositiveFloat = 30.0
+    logging_level: Literal[CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET] = (
+        INFO
+    )
     _client: AsyncOpenAI
+    _logger: Logger
 
     def model_post_init(self, context: Any, /) -> None:
         self._client = AsyncOpenAI(
             api_key=self.openai_api_key.get_secret_value(),
             timeout=self.timeout,
         )
+        self._logger = getLogger("llm_cleanup")
+        self._logger.setLevel(self.logging_level)
 
     system_prompt: str = """You are a text cleanup assistant. Your task is to:
 1. Fix OCR mistakes and typos
@@ -58,16 +72,15 @@ wszystko w porządku? Czy nie trzeba zwrócić uwagi na coś innego?
     """
 
     async def transform(self, text: str) -> str:
-        stream = await self._client.chat.completions.create(
+        response = await self._client.chat.completions.create(
             model=self.model,
             messages=[
                 {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": text},
             ],
-            stream=True,
         )
-        chunks = []
-        async for chunk in stream:
-            if chunk.choices[0].delta.content:
-                chunks.append(chunk.choices[0].delta.content)
-        return "".join(chunks)
+        cleaned_content = response.choices[0].message.content
+        self._logger.debug(
+            f"Cleaned data of length {len(text)} to {len(cleaned_content)} characters"
+        )
+        return cleaned_content
