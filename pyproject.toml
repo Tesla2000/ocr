@@ -24,7 +24,11 @@ packages = ["ocr"]
 google-drive = [
     "google-api-python-client>=2.188.0",
 ]
-llm-cleanup = [
+llm-cleanup = []
+llm-cleanup-anthropic = [
+    "anthropic>=0.76.0",
+]
+llm-cleanup-openai = [
     "openai>=2.15.0",
 ]
 sylable-splitting = [

@@ -9,28 +9,21 @@ from logging import WARNING
 from typing import Any
 from typing import Literal
 
+from ocr.output.transfomations.llm_cleanup.provider import Anthropic
+from ocr.output.transfomations.llm_cleanup.provider import AnyProvider
+from ocr.output.transfomations.llm_cleanup.provider.message import Message
 from ocr.output.transfomations.transformation import Transformation
-from openai import AsyncOpenAI
-from pydantic import PositiveFloat
-from pydantic import SecretStr
 
 
 class LLMCleanup(Transformation):
     type: Literal["llm-cleanup"] = "llm-cleanup"
-    openai_api_key: SecretStr
-    model: str = "gpt-4.1-nano"
-    timeout: PositiveFloat = 30.0
     logging_level: Literal[CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET] = (
         INFO
     )
-    _client: AsyncOpenAI
+    llm_provider: AnyProvider = Anthropic
     _logger: Logger
 
     def model_post_init(self, context: Any, /) -> None:
-        self._client = AsyncOpenAI(
-            api_key=self.openai_api_key.get_secret_value(),
-            timeout=self.timeout,
-        )
         self._logger = getLogger("llm_cleanup")
         self._logger.setLevel(self.logging_level)
 
@@ -41,6 +34,7 @@ class LLMCleanup(Transformation):
 4. Remove footers and repeated elements
 5. Preserve the actual content and maintain proper paragraph structure
 6. Fix formatting issues
+7. Keep original context intact don't skip any parts
 
 Return only the cleaned text without any explanations or metadata. You will be given text in polish
 
@@ -72,14 +66,12 @@ wszystko w porządku? Czy nie trzeba zwrócić uwagi na coś innego?
     """
 
     async def transform(self, text: str) -> str:
-        response = await self._client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self.system_prompt},
-                {"role": "user", "content": text},
-            ],
+        cleaned_content = await self.llm_provider.clean(
+            messages=(
+                Message("system", self.system_prompt),
+                Message("user", text),
+            ),
         )
-        cleaned_content = response.choices[0].message.content
         self._logger.debug(
             f"Cleaned data of length {len(text)} to {len(cleaned_content)} characters"
         )
