@@ -175,6 +175,14 @@ class TestSplitLongWordsConfiguration(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIsNotNone(transformation._dic)
 
+    async def test_too_long_syllable(self) -> None:
+        transformation = SplitLongWords(max_syllable_group_length=5)
+        long_syllable_element = "chrząszczowy?"
+        transformed_text = await transformation.transform(
+            long_syllable_element
+        )
+        self.assertEqual("chrząsz czowy?", transformed_text)
+
 
 if __name__ == "__main__":
     unittest.main()

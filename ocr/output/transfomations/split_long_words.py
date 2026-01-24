@@ -8,7 +8,7 @@ from itertools import count
 from typing import Literal
 from typing import TYPE_CHECKING
 
-from pydantic import Field
+from pydantic import PositiveInt
 
 if TYPE_CHECKING:
     from pyphen import Pyphen
@@ -17,11 +17,7 @@ from ocr.output.transfomations.transformation import Transformation
 
 class SplitLongWords(Transformation):
     type: Literal["split-long-words"] = "split-long-words"
-    max_syllable_group_length: int = Field(
-        10,
-        ge=9,
-        description="Can't be shorter than 9 letter to be no shorter than 'chrząszcz' - the longest polish syllable",
-    )
+    max_syllable_group_length: PositiveInt = 10
     separator: str = " "
     lang: str = "pl_PL"
     _dic: "Pyphen"
@@ -67,7 +63,12 @@ class SplitLongWords(Transformation):
             for syllable_group in self._borders_to_syllables(
                 borders, syllables
             ):
-                max_length = max(max_length, sum(map(len, syllable_group)))
+                group_length = sum(map(len, syllable_group))
+                if len(syllable_group) == 1:
+                    group_length = min(
+                        group_length, self.max_syllable_group_length
+                    )
+                max_length = max(max_length, group_length)
             return max_length
 
         for n_groups in count(2):
