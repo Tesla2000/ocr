@@ -26,7 +26,7 @@ class GoogleDriveInput(Input):
     credentials_path: Annotated[
         Path, AfterValidator(_validate_credentials_path)
     ]
-    folder_id: str
+    directory_id: str
     temp_directory: Path = Path(mkdtemp(dir="/dev/shm"))
     _service: "Resource"
 
@@ -42,7 +42,7 @@ class GoogleDriveInput(Input):
     def get_images(self) -> tuple[Path, ...]:
         from googleapiclient.http import MediaIoBaseDownload
 
-        query = f"'{self.folder_id}' in parents and trashed=false"
+        query = f"'{self.directory_id}' in parents and trashed=false"
         results = (
             self._service.files()
             .list(q=query, fields="files(id, name)", orderBy="name")

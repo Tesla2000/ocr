@@ -6,7 +6,7 @@ from typing import Any
 from typing import Literal
 
 from google.oauth2.service_account import Credentials
-from ocr.output._base import Output
+from ocr.output.local_ouptup._base import Output
 from pydantic import AfterValidator
 
 
@@ -23,7 +23,7 @@ class GoogleDriveOutput(Output):
     credentials_path: Annotated[
         Path, AfterValidator(_validate_credentials_path)
     ]
-    folder_id: str
+    directory_id: str
     filename: str
     _service: Any = None
 
@@ -42,7 +42,7 @@ class GoogleDriveOutput(Output):
         content = await self._apply_transformations("\n".join(results))
         file_metadata = {
             "name": self.filename,
-            "parents": [self.folder_id],
+            "parents": [self.directory_id],
         }
         media = MediaIoBaseUpload(
             BytesIO(content.encode("utf-8")),

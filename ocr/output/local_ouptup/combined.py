@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Literal
 
-from ocr.output._base import Output
+from ocr.output.local_ouptup._base import Output
 
 
 class CombinedOutput(Output):

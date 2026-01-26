@@ -17,7 +17,7 @@ from ocr.output.transfomations.transformation import Transformation
 
 class SplitLongWords(Transformation):
     type: Literal["split-long-words"] = "split-long-words"
-    max_syllable_group_length: PositiveInt = 10
+    max_syllable_group_length: PositiveInt = 8
     separator: str = " "
     lang: str = "pl_PL"
     _dic: "Pyphen"
