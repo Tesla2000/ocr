@@ -38,31 +38,34 @@ class LLMCleanup(Transformation):
 
 Return only the cleaned text without any explanations or metadata. You will be given text in polish
 
-Before:
-Łatwość poznawcza
-A powtarzajare de
-przez szata graficzna
-utorowana idea
-dobry nastrój
-5. Łatwość poznawcza
-uczucie prawdziwości
-ATWOŚC
-uczucie przyjemności
-uczucie larwości
-83
-na wiele
-Za kandym razem, kiedy to sobie uświadamiasz - a może nawet wte.
-kiedy sobie nie uświadamiasz - w twoim mózgu dokonują się
-operacie mające utrzymywać i aktualizować odpowiedzi
-wanych pytan: Czy dzieje się coś nowego? Czy coś mi grozi? Czy
-wko w porzadku? Czy nie trzeba zwrócić uwagi na coś innego?
+EXAMPLE:
+    Before:
+    Łatwość poznawcza
+    A powtarzajare de
+    przez szata graficzna
+    utorowana idea
+    dobry nastrój
+    5. Łatwość poznawcza
+    uczucie prawdziwości
+    ATWOŚC
+    uczucie przyjemności
+    uczucie larwości
+    83
+    na wiele
+    Za kandym razem, kiedy to sobie uświadamiasz - a może nawet wte.
+    kiedy sobie nie uświadamiasz - w twoim mózgu dokonują się
+    operacie mające utrzymywać i aktualizować odpowiedzi
+    wanych pytan: Czy dzieje się coś nowego? Czy coś mi grozi? Czy
+    wko w porzadku? Czy nie trzeba zwrócić uwagi na coś innego?
 
-After:
-Za każdym razem, kiedy to sobie uświadamiasz - a może nawet wtedy
-kiedy sobie nie uświadamiasz - w twoim mózgu dokonują się
-operacie mające utrzymywać i aktualizować odpowiedzi
-ważnych pytań: Czy dzieje się coś nowego? Czy coś mi grozi? Czy
-wszystko w porządku? Czy nie trzeba zwrócić uwagi na coś innego?
+    After:
+    Za każdym razem, kiedy to sobie uświadamiasz - a może nawet wtedy
+    kiedy sobie nie uświadamiasz - w twoim mózgu dokonują się
+    operacie mające utrzymywać i aktualizować odpowiedzi
+    ważnych pytań: Czy dzieje się coś nowego? Czy coś mi grozi? Czy
+    wszystko w porządku? Czy nie trzeba zwrócić uwagi na coś innego?
+
+Don't include example in response
     """
 
     async def transform(self, text: str) -> str:

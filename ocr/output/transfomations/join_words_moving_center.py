@@ -10,7 +10,7 @@ from pydantic import PositiveInt
 
 class JoinWordsMovingCenter(Transformation):
     type: Literal["join-words-moving-center"] = "join-words-moving-center"
-    sequence_length: PositiveInt = 50
+    sequence_length: PositiveInt = 30
     word_separator: str = "\u2800"
 
     async def transform(self, text: str) -> str:
