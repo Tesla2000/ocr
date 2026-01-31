@@ -150,6 +150,14 @@ class TestSplitLongWords(unittest.IsolatedAsyncioTestCase):
         combined = "".join(result)
         self.assertEqual(combined.lower(), word.lower())
 
+    def test_group_syllables_prioritizes_first_group_length(self) -> None:
+        self.transformation.max_syllable_group_length = 7
+        syllables = ("aaaa", "bbb", "cccc")
+        result = self.transformation._group_syllables(syllables)
+        self.assertEqual(result, ("aaaabbb", "cccc"))
+        lengths = [len(group) for group in result]
+        self.assertEqual(lengths, [7, 4])
+
 
 class TestSplitLongWordsConfiguration(unittest.IsolatedAsyncioTestCase):
     def test_default_values(self) -> None:

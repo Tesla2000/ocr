@@ -17,7 +17,7 @@ from ocr.output.transfomations.transformation import Transformation
 
 class SplitLongWords(Transformation):
     type: Literal["split-long-words"] = "split-long-words"
-    max_syllable_group_length: PositiveInt = 8
+    max_syllable_group_length: PositiveInt = 9
     separator: str = " "
     lang: str = "pl_PL"
     _dic: "Pyphen"
@@ -73,7 +73,9 @@ class SplitLongWords(Transformation):
 
         for n_groups in count(2):
             best_borders = min(
-                combinations(range(len(syllables) - 1), n_groups - 1),
+                combinations(
+                    reversed(range(len(syllables) - 1)), n_groups - 1
+                ),
                 key=get_longest_group,
             )
             if (
