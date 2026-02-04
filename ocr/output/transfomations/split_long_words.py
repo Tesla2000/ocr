@@ -5,6 +5,7 @@ from collections.abc import Generator
 from collections.abc import Sequence
 from itertools import combinations
 from itertools import count
+from typing import Any
 from typing import Literal
 from typing import TYPE_CHECKING
 
@@ -22,7 +23,7 @@ class SplitLongWords(Transformation):
     lang: str = "pl_PL"
     _dic: "Pyphen"
 
-    def model_post_init(self, __context) -> None:
+    def model_post_init(self, __context: Any) -> None:
         from pyphen import Pyphen
 
         self._dic = Pyphen(lang=self.lang)

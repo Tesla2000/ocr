@@ -5,7 +5,7 @@ from ocr.input.google_drive import GoogleDriveInput
 
 
 class GoogleDriveDirectoryInput(GoogleDriveInput):
-    type: Literal["google-drive-directory"] = "google-drive-directory"
+    type: Literal["google-drive-directory"] = "google-drive-directory"  # type: ignore[assignment]
 
     def get_images(self) -> tuple[Path, ...]:
         query = f"'{self.directory_id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"

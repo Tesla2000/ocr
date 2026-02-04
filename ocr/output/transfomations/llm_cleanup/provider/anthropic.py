@@ -1,8 +1,10 @@
 from collections.abc import Iterable
+from typing import Annotated
 from typing import Any
 from typing import Literal
 from typing import TYPE_CHECKING
 
+from pydantic import AfterValidator
 from pydantic import PositiveInt
 
 if TYPE_CHECKING:
@@ -12,9 +14,17 @@ from ocr.output.transfomations.llm_cleanup.provider._base import LLMProvider
 from ocr.output.transfomations.llm_cleanup.provider.message import Message
 
 
+def _validate_api_key(key: SecretStr) -> SecretStr:
+    if not key.get_secret_value():
+        raise ValueError("API key cannot be empty")
+    return key
+
+
 class Anthropic(LLMProvider):
     type: Literal["anthropic"] = "anthropic"
-    anthropic_api_key: SecretStr
+    anthropic_api_key: Annotated[
+        SecretStr, AfterValidator(_validate_api_key)
+    ] = SecretStr("")
     _client: "AsyncAnthropic"
     model: str = "claude-haiku-4-5"
     max_tokens: PositiveInt = 64000
@@ -40,8 +50,7 @@ class Anthropic(LLMProvider):
             model=self.model,
             max_tokens=self.max_tokens,
             system=system_content,
-            messages=[
-                {"role": m.role, "content": m.content} for m in user_messages
-            ],
+            messages=[m.as_dict() for m in user_messages],
         )
-        return response.content[0].text
+        text_block = response.content[0]
+        return str(text_block.text)

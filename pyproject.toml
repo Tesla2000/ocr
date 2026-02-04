@@ -11,6 +11,7 @@ dependencies = [
     "pydantic>=2.8.2",
     "pydantic-settings>=2.12.0",
     "google-cloud-vision>=3.8.0",
+    "mypy>=1.13.0",
 ]
 
 [build-system]
@@ -34,3 +35,8 @@ llm-cleanup-openai = [
 sylable-splitting = [
     "pyphen>=0.17.2",
 ]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+plugins = ["pydantic.mypy"]

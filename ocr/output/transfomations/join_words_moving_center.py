@@ -42,7 +42,7 @@ class JoinWordsMovingCenter(Transformation):
     def _take_words_in_limit(
         self, half_word_length: int, words_iterable: Iterable[str]
     ) -> list[str]:
-        words = []
+        words: list[str] = []
         for word in words_iterable:
             n_remaining_characters = self._calc_remaining_characters(
                 half_word_length, words

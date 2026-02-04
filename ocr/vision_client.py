@@ -14,7 +14,7 @@ class VisionClient(BaseModel):
 
     def model_post_init(self, context: Any, /) -> None:
         self._client = ImageAnnotatorClient(
-            credentials=Credentials(token=self.token.get_secret_value())
+            credentials=Credentials(token=self.token.get_secret_value())  # type: ignore[no-untyped-call]
         )
 
     def extract_text(self, image_path: Path) -> str:
@@ -25,4 +25,5 @@ class VisionClient(BaseModel):
             raise RuntimeError(f"Vision API error: {response.error.message}")
         if not response.text_annotations:
             return ""
-        return response.text_annotations[0].description
+        description = response.text_annotations[0].description
+        return str(description) if description else ""

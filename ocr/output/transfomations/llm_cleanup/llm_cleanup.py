@@ -1,11 +1,7 @@
-from logging import CRITICAL
-from logging import DEBUG
-from logging import ERROR
+from enum import IntEnum
 from logging import getLogger
 from logging import INFO
 from logging import Logger
-from logging import NOTSET
-from logging import WARNING
 from typing import Any
 from typing import Literal
 
@@ -13,14 +9,22 @@ from ocr.output.transfomations.llm_cleanup.provider import Anthropic
 from ocr.output.transfomations.llm_cleanup.provider import AnyProvider
 from ocr.output.transfomations.llm_cleanup.provider.message import Message
 from ocr.output.transfomations.transformation import Transformation
+from pydantic import Field
+
+
+class LogLevel(IntEnum):
+    CRITICAL = 50
+    ERROR = 40
+    WARNING = 30
+    INFO = 20
+    DEBUG = 10
+    NOTSET = 0
 
 
 class LLMCleanup(Transformation):
     type: Literal["llm-cleanup"] = "llm-cleanup"
-    logging_level: Literal[CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET] = (
-        INFO
-    )
-    llm_provider: AnyProvider = Anthropic
+    logging_level: LogLevel = LogLevel(INFO)
+    llm_provider: AnyProvider = Field(default_factory=Anthropic)
     _logger: Logger
 
     def model_post_init(self, context: Any, /) -> None:

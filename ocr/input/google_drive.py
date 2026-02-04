@@ -33,7 +33,7 @@ class GoogleDriveInput(Input):
     def model_post_init(self, context: Any, /) -> None:
         from googleapiclient.discovery import build
 
-        credentials = Credentials.from_service_account_file(
+        credentials = Credentials.from_service_account_file(  # type: ignore[no-untyped-call]
             str(self.credentials_path),
             scopes=["https://www.googleapis.com/auth/drive.readonly"],
         )
