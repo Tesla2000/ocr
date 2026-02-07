@@ -326,7 +326,29 @@ Input:  "międzynarodowy"
 Output: "między naro dowy"
 ```
 
-### 2. Join Words Moving Center
+### 2. Duplicate Long Words
+
+Duplicates long words multiple times based on their length to improve readability for speed reading applications.
+
+```bash
+--output.transformations.0.type=duplicate-long-words \
+--output.transformations.0.max-syllable-group-length=9
+```
+
+**Parameters**:
+- `max-syllable-group-length` (default: 9): Maximum characters per syllable group
+
+**How it works**:
+- Words are duplicated based on `ceil(word_length / max_syllable_group_length)`
+- Helps with speed reading by repeating longer words
+
+**Example**:
+```
+Input:  "internationalization"
+Output: "internationalization internationalization internationalization"
+```
+
+### 3. Join Words Moving Center
 
 Centers words within fixed-width lines for improved readability (useful for speed reading):
 
@@ -347,7 +369,7 @@ Centers words within fixed-width lines for improved readability (useful for spee
 ⠀⠀quick⠀brown⠀fox⠀jumps⠀
 ```
 
-### 3. LLM Cleanup
+### 4. LLM Cleanup
 
 Uses AI to clean up OCR errors, remove headers/footers, and improve text quality.
 

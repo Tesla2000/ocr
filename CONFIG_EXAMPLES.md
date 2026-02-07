@@ -233,7 +233,20 @@ python -m ocr \
   --output.transformations.0.lang=en_US
 ```
 
-### 16. Word Centering for Speed Reading
+### 16. Duplicate Long Words
+
+```bash
+python -m ocr \
+  --input.type=directory \
+  --input.input-directory=./input_images \
+  --text-extractor.vision-client.token=YOUR_VISION_KEY \
+  --output.type=combined \
+  --output.file=./output.txt \
+  --output.transformations.0.type=duplicate-long-words \
+  --output.transformations.0.max-syllable-group-length=9
+```
+
+### 17. Word Centering for Speed Reading
 
 ```bash
 python -m ocr \
@@ -247,7 +260,7 @@ python -m ocr \
   --output.transformations.0.word-separator="⠀"
 ```
 
-### 17. Chained Transformations: Cleanup + Split
+### 18. Chained Transformations: Cleanup + Split
 
 ```bash
 python -m ocr \
@@ -263,7 +276,7 @@ python -m ocr \
   --output.transformations.1.max-syllable-group-length=9
 ```
 
-### 18. Triple Chain: Cleanup + Split + Center
+### 19. Triple Chain: Cleanup + Split + Center
 
 ```bash
 python -m ocr \
@@ -285,7 +298,7 @@ python -m ocr \
 
 ## Complete Workflows
 
-### 19. Production Pipeline: Google Drive → Cleanup → RClone
+### 20. Production Pipeline: Google Drive → Cleanup → RClone
 
 ```bash
 python -m ocr \
@@ -306,7 +319,7 @@ python -m ocr \
   --output.local-output.transformations.1.max-syllable-group-length=9
 ```
 
-### 20. Speed Reading Pipeline
+### 21. Speed Reading Pipeline
 
 ```bash
 python -m ocr \
@@ -323,7 +336,7 @@ python -m ocr \
   --output.transformations.1.sequence-length=30
 ```
 
-### 21. Archive Pipeline: Local → Separate Files → S3
+### 22. Archive Pipeline: Local → Separate Files → S3
 
 ```bash
 python -m ocr \
@@ -340,7 +353,7 @@ python -m ocr \
   --output.local-output.transformations.0.llm-provider.api-key=YOUR_OPENAI_KEY
 ```
 
-### 22. Minimal Processing (Fast, No AI)
+### 23. Minimal Processing (Fast, No AI)
 
 ```bash
 python -m ocr \
@@ -354,7 +367,7 @@ python -m ocr \
   --output.transformations.0.max-syllable-group-length=9
 ```
 
-### 23. Debug Mode with Logging
+### 24. Debug Mode with Logging
 
 ```bash
 python -m ocr \
