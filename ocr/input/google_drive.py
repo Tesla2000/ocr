@@ -3,14 +3,13 @@ from tempfile import mkdtemp
 from typing import Annotated
 from typing import Any
 from typing import Literal
-from typing import TYPE_CHECKING
 
 from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.discovery import Resource
+from googleapiclient.http import MediaIoBaseDownload
 from ocr.input._base import Input
 from pydantic import AfterValidator
-
-if TYPE_CHECKING:
-    from googleapiclient.discovery import Resource
 
 
 def _validate_credentials_path(path: Path) -> Path:
@@ -28,11 +27,9 @@ class GoogleDriveInput(Input):
     ]
     directory_id: str
     temp_directory: Path = Path(mkdtemp(dir="/dev/shm"))
-    _service: "Resource"
+    _service: Resource
 
     def model_post_init(self, context: Any, /) -> None:
-        from googleapiclient.discovery import build
-
         credentials = Credentials.from_service_account_file(  # type: ignore[no-untyped-call]
             str(self.credentials_path),
             scopes=["https://www.googleapis.com/auth/drive.readonly"],
@@ -40,8 +37,6 @@ class GoogleDriveInput(Input):
         self._service = build("drive", "v3", credentials=credentials)
 
     def get_images(self) -> tuple[Path, ...]:
-        from googleapiclient.http import MediaIoBaseDownload
-
         query = f"'{self.directory_id}' in parents and trashed=false"
         results = (
             self._service.files()

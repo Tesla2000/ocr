@@ -53,3 +53,8 @@ repos:
           - pydantic>=2.8.2
           - pydantic-settings>=2.12.0
           - google-cloud-vision>=3.8.0
+  - repo: https://github.com/Tesla2000/any-hook
+    rev: v0.0.17
+    hooks:
+      - id: any-hook
+        args: [--modifiers, '[{"type":"object-to-any"},{"type":"pydantic-config-to-model-config"},{"type":"local-imports"},{"type":"pydantic-v1-to-v2"},{"type":"str-enum-inheritance"},{"type":"forbidden-functions","forbidden_functions":["hasattr","getattr"]}]']

@@ -6,6 +6,8 @@ from typing import Any
 from typing import Literal
 
 from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseUpload
 from ocr.output.local_ouptup._base import Output
 from pydantic import AfterValidator
 
@@ -28,8 +30,6 @@ class GoogleDriveOutput(Output):
     _service: Any = None
 
     def model_post_init(self, context: Any, /) -> None:
-        from googleapiclient.discovery import build
-
         credentials = Credentials.from_service_account_file(  # type: ignore[no-untyped-call]
             str(self.credentials_path),
             scopes=["https://www.googleapis.com/auth/drive.file"],
@@ -37,8 +37,6 @@ class GoogleDriveOutput(Output):
         self._service = build("drive", "v3", credentials=credentials)
 
     async def save_results(self, results: Collection[str]) -> None:
-        from googleapiclient.http import MediaIoBaseUpload
-
         content = await self._apply_transformations("\n".join(results))
         file_metadata = {
             "name": self.filename,

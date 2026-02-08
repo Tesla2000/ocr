@@ -2,15 +2,12 @@ from collections.abc import Iterable
 from typing import Annotated
 from typing import Any
 from typing import Literal
-from typing import TYPE_CHECKING
 
-from pydantic import AfterValidator
-
-if TYPE_CHECKING:
-    from openai import AsyncOpenAI
-from pydantic import SecretStr
 from ocr.output.transfomations.llm_cleanup.provider._base import LLMProvider
 from ocr.output.transfomations.llm_cleanup.provider.message import Message
+from openai import AsyncOpenAI
+from pydantic import AfterValidator
+from pydantic import SecretStr
 
 
 def _validate_api_key(key: SecretStr) -> SecretStr:
@@ -24,12 +21,10 @@ class OpenAI(LLMProvider):
     openai_api_key: Annotated[SecretStr, AfterValidator(_validate_api_key)] = (
         SecretStr("")
     )
-    _client: "AsyncOpenAI"
+    _client: AsyncOpenAI
     model: str = "gpt-5-nano"
 
     def model_post_init(self, context: Any, /) -> None:
-        from openai import AsyncOpenAI
-
         self._client = AsyncOpenAI(
             api_key=self.openai_api_key.get_secret_value(),
             timeout=self.timeout,

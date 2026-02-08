@@ -73,7 +73,7 @@ Don't include example in response
     """
 
     async def transform(self, text: str) -> str:
-        cleaned_content = await self.llm_provider.clean(
+        cleaned_content: str = await self.llm_provider.clean(
             messages=(
                 Message("system", self.system_prompt),
                 Message("user", text),

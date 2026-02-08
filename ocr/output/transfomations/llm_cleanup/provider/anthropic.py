@@ -2,16 +2,13 @@ from collections.abc import Iterable
 from typing import Annotated
 from typing import Any
 from typing import Literal
-from typing import TYPE_CHECKING
 
-from pydantic import AfterValidator
-from pydantic import PositiveInt
-
-if TYPE_CHECKING:
-    from anthropic import AsyncAnthropic
-from pydantic import SecretStr
+from anthropic import AsyncAnthropic
 from ocr.output.transfomations.llm_cleanup.provider._base import LLMProvider
 from ocr.output.transfomations.llm_cleanup.provider.message import Message
+from pydantic import AfterValidator
+from pydantic import PositiveInt
+from pydantic import SecretStr
 
 
 def _validate_api_key(key: SecretStr) -> SecretStr:
@@ -25,13 +22,11 @@ class Anthropic(LLMProvider):
     anthropic_api_key: Annotated[
         SecretStr, AfterValidator(_validate_api_key)
     ] = SecretStr("")
-    _client: "AsyncAnthropic"
+    _client: AsyncAnthropic
     model: str = "claude-haiku-4-5"
     max_tokens: PositiveInt = 64000
 
     def model_post_init(self, context: Any, /) -> None:
-        from anthropic import AsyncAnthropic
-
         self._client = AsyncAnthropic(
             api_key=self.anthropic_api_key.get_secret_value(),
             timeout=self.timeout,

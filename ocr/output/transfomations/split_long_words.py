@@ -7,13 +7,10 @@ from itertools import combinations
 from itertools import count
 from typing import Any
 from typing import Literal
-from typing import TYPE_CHECKING
 
-from pydantic import PositiveInt
-
-if TYPE_CHECKING:
-    from pyphen import Pyphen
 from ocr.output.transfomations.transformation import Transformation
+from pydantic import PositiveInt
+from pyphen import Pyphen
 
 
 class SplitLongWords(Transformation):
@@ -21,11 +18,9 @@ class SplitLongWords(Transformation):
     max_syllable_group_length: PositiveInt = 9
     separator: str = " "
     lang: str = "pl_PL"
-    _dic: "Pyphen"
+    _dic: Pyphen
 
     def model_post_init(self, __context: Any) -> None:
-        from pyphen import Pyphen
-
         self._dic = Pyphen(lang=self.lang)
 
     async def transform(self, text: str) -> str:
