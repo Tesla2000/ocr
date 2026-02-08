@@ -4,8 +4,8 @@ from typing import Any
 from typing import Literal
 
 from anthropic import AsyncAnthropic
-from ocr.output.transfomations.llm_cleanup.provider._base import LLMProvider
-from ocr.output.transfomations.llm_cleanup.provider.message import Message
+from ocr.transfomations.llm_cleanup.provider._base import LLMProvider
+from ocr.transfomations.llm_cleanup.provider.message import Message
 from pydantic import AfterValidator
 from pydantic import PositiveInt
 from pydantic import SecretStr

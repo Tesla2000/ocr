@@ -3,7 +3,7 @@ from abc import abstractmethod
 from collections.abc import Iterable
 from typing import Optional
 
-from ocr.output.transfomations.llm_cleanup.provider.message import Message
+from ocr.transfomations.llm_cleanup.provider.message import Message
 from pydantic import BaseModel
 from pydantic import PositiveFloat
 

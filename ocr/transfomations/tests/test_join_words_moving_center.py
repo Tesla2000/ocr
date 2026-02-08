@@ -1,6 +1,6 @@
 import unittest
 
-from ocr.output.transfomations.join_words_moving_center import (
+from ocr.transfomations import (
     JoinWordsMovingCenter,
 )
 

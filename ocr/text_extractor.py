@@ -13,12 +13,11 @@ class TextExtractor(BaseModel):
     n_tasks: PositiveInt = 12
     return_exceptions: bool = False
 
-    async def extract_from_images(
-        self, images: Iterable[Path]
-    ) -> tuple[str, ...]:
+    async def extract_from_images(self, images: Iterable[Path]) -> str:
         tasks = [self._extract_single(image) for image in images]
         async with Semaphore(self.n_tasks):
-            return tuple(await asyncio.gather(*tasks))
+            results = await asyncio.gather(*tasks)
+            return "\n".join(results)
 
     async def _extract_single(self, image_path: Path) -> str:
         text = await asyncio.to_thread(

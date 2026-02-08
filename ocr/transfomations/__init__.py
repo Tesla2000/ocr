@@ -3,11 +3,9 @@ from typing import Annotated
 from typing import TypeAlias
 from typing import Union
 
-from ocr.output.transfomations.duplicate_long_words import DuplicateLongWords
-from ocr.output.transfomations.join_words_moving_center import (
-    JoinWordsMovingCenter,
-)
-from ocr.output.transfomations.transformation import Transformation
+from ocr.transfomations.duplicate_long_words import DuplicateLongWords
+from ocr.transfomations.join_words_moving_center import JoinWordsMovingCenter
+from ocr.transfomations.transformation import Transformation
 from pydantic import Field
 
 _logger = logging.getLogger(__name__)
@@ -22,7 +20,7 @@ __all__ = [
     "AnyTransformation",
 ]
 try:
-    from ocr.output.transfomations.split_long_words import SplitLongWords
+    from ocr.transfomations.split_long_words import SplitLongWords
 
     AnyTransformation = Annotated[  # type: ignore[misc]
         Union[AnyTransformation, SplitLongWords], Field(discriminator="type")
@@ -33,7 +31,7 @@ except ImportError as e:
         f"Package necessary to use split long words is not installed, split long words is disabled.\n{e}"
     )
 try:
-    from ocr.output.transfomations.llm_cleanup.llm_cleanup import LLMCleanup
+    from ocr.transfomations.llm_cleanup import LLMCleanup
 
     AnyTransformation = Annotated[  # type: ignore[misc]
         Union[AnyTransformation, LLMCleanup], Field(discriminator="type")

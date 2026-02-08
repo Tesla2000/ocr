@@ -3,7 +3,7 @@ from itertools import chain
 from math import ceil
 from typing import Literal
 
-from ocr.output.transfomations.transformation import Transformation
+from ocr.transfomations.transformation import Transformation
 from pydantic import PositiveInt
 
 

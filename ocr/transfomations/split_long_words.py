@@ -8,7 +8,7 @@ from itertools import count
 from typing import Any
 from typing import Literal
 
-from ocr.output.transfomations.transformation import Transformation
+from ocr.transfomations.transformation import Transformation
 from pydantic import PositiveInt
 from pyphen import Pyphen
 

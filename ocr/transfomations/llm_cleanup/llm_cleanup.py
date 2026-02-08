@@ -5,10 +5,10 @@ from logging import Logger
 from typing import Any
 from typing import Literal
 
-from ocr.output.transfomations.llm_cleanup.provider import Anthropic
-from ocr.output.transfomations.llm_cleanup.provider import AnyProvider
-from ocr.output.transfomations.llm_cleanup.provider.message import Message
-from ocr.output.transfomations.transformation import Transformation
+from ocr.transfomations.llm_cleanup.provider import Anthropic
+from ocr.transfomations.llm_cleanup.provider import AnyProvider
+from ocr.transfomations.llm_cleanup.provider.message import Message
+from ocr.transfomations.transformation import Transformation
 from pydantic import Field
 
 

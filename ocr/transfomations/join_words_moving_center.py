@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from math import ceil
 from typing import Literal
 
-from ocr.output.transfomations.transformation import Transformation
+from ocr.transfomations.transformation import Transformation
 from pydantic import PositiveInt
 
 

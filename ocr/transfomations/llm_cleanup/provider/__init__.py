@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 __all__ = ["AnyProvider"]
 AnyProvider: TypeAlias = Any
 try:
-    from ocr.output.transfomations.llm_cleanup.provider.anthropic import (
+    from ocr.transfomations.llm_cleanup.provider.anthropic import (
         Anthropic,
     )
 
@@ -22,7 +22,7 @@ except ImportError as e:
     )
     AnyProvider = None  # type: ignore[misc]
 try:
-    from ocr.output.transfomations.llm_cleanup.provider.openai import OpenAI
+    from ocr.transfomations.llm_cleanup.provider.openai import OpenAI
 
     if AnyProvider is not None:
         AnyProvider = Annotated[  # type: ignore[misc]

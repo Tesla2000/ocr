@@ -1,4 +1,3 @@
-from collections.abc import Collection
 from io import BytesIO
 from pathlib import Path
 from typing import Annotated
@@ -8,7 +7,7 @@ from typing import Literal
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
-from ocr.output.local_ouptup._base import Output
+from ocr.output._base import Output
 from pydantic import AfterValidator
 
 
@@ -36,14 +35,13 @@ class GoogleDriveOutput(Output):
         )
         self._service = build("drive", "v3", credentials=credentials)
 
-    async def save_results(self, results: Collection[str]) -> None:
-        content = await self._apply_transformations("\n".join(results))
+    async def save_results(self, result: str) -> None:
         file_metadata = {
             "name": self.filename,
             "parents": [self.directory_id],
         }
         media = MediaIoBaseUpload(
-            BytesIO(content.encode("utf-8")),
+            BytesIO(result.encode("utf-8")),
             mimetype="text/plain",
             resumable=True,
         )

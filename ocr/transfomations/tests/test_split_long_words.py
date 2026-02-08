@@ -1,6 +1,6 @@
 import unittest
 
-from ocr.output.transfomations.split_long_words import SplitLongWords
+from ocr.transfomations import SplitLongWords
 
 
 class TestSplitLongWords(unittest.IsolatedAsyncioTestCase):
