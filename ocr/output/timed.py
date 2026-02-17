@@ -20,7 +20,7 @@ class TimedOutput(Output):
         default_factory=DefaultDurationCalculator
     )
 
-    async def save_results(self, result: str) -> None:
+    async def _save_results(self, result: str) -> None:
         self.path.parent.mkdir(exist_ok=True, parents=True)
         words = result.split()
         self.path.write_text(

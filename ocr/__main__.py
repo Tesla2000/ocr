@@ -1,13 +1,13 @@
 from ocr.input import AnyInput
 from ocr.output import AnyOutput
 from ocr.text_extractor import TextExtractor
-from ocr.transfomations import AnyTransformation
+from ocr.transfomations import TransformationsApplier
 from pydantic_settings import BaseSettings
 from pydantic_settings import CliApp
 from pydantic_settings import SettingsConfigDict
 
 
-class OCR(BaseSettings):
+class OCR(BaseSettings, TransformationsApplier):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -19,7 +19,6 @@ class OCR(BaseSettings):
 
     input: AnyInput
     text_extractor: TextExtractor
-    transformations: tuple[AnyTransformation, ...] = ()
     outputs: tuple[AnyOutput, ...]
 
     async def cli_cmd(self) -> None:
@@ -27,14 +26,9 @@ class OCR(BaseSettings):
         if not images:
             return
         result = await self.text_extractor.extract_from_images(images)
-        transformed_result = await self._apply_transformations(result)
+        transformed_result = await self.apply_transformations(result)
         for output in self.outputs:
             await output.save_results(transformed_result)
-
-    async def _apply_transformations(self, text: str) -> str:
-        for transformation in self.transformations:
-            text = await transformation.transform(text)
-        return text
 
 
 if __name__ == "__main__":

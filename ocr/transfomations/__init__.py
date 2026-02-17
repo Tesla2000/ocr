@@ -6,6 +6,7 @@ from typing import Union
 from ocr.transfomations.duplicate_long_words import DuplicateLongWords
 from ocr.transfomations.join_words_moving_center import JoinWordsMovingCenter
 from ocr.transfomations.transformation import Transformation
+from pydantic import BaseModel
 from pydantic import Field
 
 _logger = logging.getLogger(__name__)
@@ -41,3 +42,15 @@ except ImportError as e:
     _logger.warning(
         f"Package necessary to use LLM cleanup is not installed, LLM cleanup is disabled.\n{e}"
     )
+
+
+class TransformationsApplier(BaseModel):
+    transformations: tuple[AnyTransformation, ...] = ()
+
+    async def apply_transformations(self, text: str) -> str:
+        for t in self.transformations:
+            text = await t.transform(text)
+        return text
+
+
+__all__.append("TransformationsApplier")

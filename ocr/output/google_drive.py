@@ -35,7 +35,7 @@ class GoogleDriveOutput(Output):
         )
         self._service = build("drive", "v3", credentials=credentials)
 
-    async def save_results(self, result: str) -> None:
+    async def _save_results(self, result: str) -> None:
         file_metadata = {
             "name": self.filename,
             "parents": [self.directory_id],

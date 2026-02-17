@@ -16,7 +16,7 @@ class TimedWordsViewer(Output):
     timed_output: TimedOutput
     reload: bool = False
 
-    async def save_results(self, result: str) -> None:
+    async def _save_results(self, result: str) -> None:
         output_file = self.timed_output.path
         if self.reload or not output_file.exists():
             self._logger.info(f"Generating timed output to {output_file}")
@@ -32,6 +32,9 @@ class TimedWordsViewer(Output):
             )
         )
         self._logger.info(f"Loaded {len(timed_words)} words for RSVP display")
+        self._logger.info(
+            f"Total duration of text is {sum(w.duration for w in timed_words)}"
+        )
         self._display_gui(timed_words)
 
     def _display_gui(self, timed_words: Sequence[WordDurationPair]) -> None:
@@ -71,8 +74,8 @@ class TimedWordsViewer(Output):
             log_wpm = min_log + (slider_value / 100) * (max_log - min_log)
             return math.exp(log_wpm)
 
-        def get_word_duration() -> float:
-            return 60.0 / words_per_minute
+        def get_word_duration(pair: WordDurationPair) -> float:
+            return pair.duration * (60.0 / words_per_minute)
 
         def show_next_word() -> None:
             nonlocal current_index
@@ -87,22 +90,21 @@ class TimedWordsViewer(Output):
             )
             current_index += 1
             if is_playing:
-                duration_ms = int(get_word_duration() * 1000)
+                duration_ms = int(get_word_duration(pair) * 1000)
                 root.after(duration_ms, show_next_word)
 
-        def start_playback() -> None:
+        def toggle_playback() -> None:
             nonlocal is_playing, current_index
-            if not is_playing:
+            if is_playing:
+                is_playing = False
+                self._logger.debug("Playback paused")
+            else:
                 is_playing = True
                 if current_index >= len(timed_words):
                     current_index = 0
                 self._logger.debug("Playback started")
                 show_next_word()
-
-        def pause_playback() -> None:
-            nonlocal is_playing
-            is_playing = False
-            self._logger.debug("Playback paused")
+            toggle_button.config(text="Pause" if is_playing else "Start")
 
         def reset_playback() -> None:
             nonlocal is_playing, current_index
@@ -110,13 +112,11 @@ class TimedWordsViewer(Output):
             current_index = 0
             word_label.config(text="")
             progress_label.config(text="")
+            toggle_button.config(text="Start")
             self._logger.debug("Playback reset")
 
         def on_space(_: tk.Event) -> None:  # type: ignore[type-arg]
-            if is_playing:
-                pause_playback()
-            else:
-                start_playback()
+            toggle_playback()
 
         def on_speed_change(slider_value: str) -> None:
             nonlocal words_per_minute
@@ -130,14 +130,10 @@ class TimedWordsViewer(Output):
         root.bind("<space>", on_space)
         button_frame = tk.Frame(root, bg="black")
         button_frame.place(relx=0.5, rely=0.05, anchor=tk.CENTER)
-        start_button = tk.Button(
-            button_frame, text="Start", command=start_playback, width=10
+        toggle_button = tk.Button(
+            button_frame, text="Start", command=toggle_playback, width=10
         )
-        start_button.pack(side=tk.LEFT, padx=5)
-        pause_button = tk.Button(
-            button_frame, text="Pause", command=pause_playback, width=10
-        )
-        pause_button.pack(side=tk.LEFT, padx=5)
+        toggle_button.pack(side=tk.LEFT, padx=5)
         reset_button = tk.Button(
             button_frame, text="Reset", command=reset_playback, width=10
         )

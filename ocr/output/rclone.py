@@ -12,6 +12,6 @@ class RClone(Output):
     output_path: str
     local_output: CombinedOutput
 
-    async def save_results(self, result: str) -> None:
+    async def _save_results(self, result: str) -> None:
         await self.local_output.save_results(result)
         os.system(f"rclone copy {self.shared_directory} {self.output_path}")
