@@ -36,6 +36,9 @@ llm-cleanup-anthropic = [
 llm-cleanup-openai = [
     "openai>=2.15.0",
 ]
+pdf = [
+    "pdf2image>=1.17.0",
+]
 sylable-splitting = [
     "pyphen>=0.17.2",
 ]

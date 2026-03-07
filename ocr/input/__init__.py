@@ -36,3 +36,14 @@ except ImportError as e:
     _logger.warning(
         f"Package necessary to use Google Drive directory input is not installed, Google Drive directory input is disabled.\n{e}"
     )
+try:
+    from ocr.input.pdf import PdfInput
+
+    AnyInput = Annotated[  # type: ignore[misc,assignment]
+        Union[AnyInput, PdfInput], Field(discriminator="type")
+    ]
+    __all__.append("PdfInput")
+except ImportError as e:
+    _logger.warning(
+        f"Package necessary to use PDF input is not installed, PDF input is disabled.\n{e}"
+    )
