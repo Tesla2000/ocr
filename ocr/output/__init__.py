@@ -15,9 +15,14 @@ AnyOutput: TypeAlias = Annotated[
 ]
 __all__ = [
     "AnyOutput",
+    "AnyTimedOutput",
     "CombinedOutput",
     "TimedOutput",
     "RClone",
+]
+AnyTimedOutput: TypeAlias = Annotated[
+    Union[TimedOutput],
+    Field(discriminator="type"),
 ]
 try:
     from ocr.output.google_drive import GoogleDriveOutput
@@ -29,6 +34,20 @@ try:
 except ImportError as e:
     _logger.warning(
         f"Package necessary to use Google Drive output is not installed, Google Drive output is disabled.\n{e}"
+    )
+try:
+    from ocr.output.timed_split import TimedSplitOutput
+
+    AnyOutput = Annotated[  # type: ignore[misc]
+        Union[AnyOutput, TimedSplitOutput], Field(discriminator="type")
+    ]
+    AnyTimedOutput = Annotated[  # type: ignore[assignment, misc]
+        Union[AnyTimedOutput, TimedSplitOutput], Field(discriminator="type")
+    ]
+    __all__.append("TimedSplitOutput")
+except ImportError as e:
+    _logger.warning(
+        f"Package necessary to use timed split output is not installed, timed split output is disabled.\n{e}"
     )
 try:
     from ocr.output.timed_viewer import TimedWordsViewer

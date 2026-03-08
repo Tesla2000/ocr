@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from logging import Logger
 from typing import Literal
 
-from ocr.output import TimedOutput
+from ocr.output import AnyTimedOutput
 from ocr.output._base import Output
 from ocr.output.timed import WordDurationPair
 
@@ -13,7 +13,7 @@ from ocr.output.timed import WordDurationPair
 class TimedWordsViewer(Output):
     _logger: Logger = logging.getLogger(__name__)
     type: Literal["timed-viewer"] = "timed-viewer"
-    timed_output: TimedOutput
+    timed_output: AnyTimedOutput
     reload: bool = False
 
     async def _save_results(self, result: str) -> None:
