@@ -5,11 +5,9 @@ from logging import Logger
 from typing import Any
 from typing import Literal
 
-from ocr.transfomations.llm_cleanup.provider import Anthropic
 from ocr.transfomations.llm_cleanup.provider import AnyProvider
 from ocr.transfomations.llm_cleanup.provider.message import Message
 from ocr.transfomations.transformation import Transformation
-from pydantic import Field
 
 
 class LogLevel(IntEnum):
@@ -24,7 +22,7 @@ class LogLevel(IntEnum):
 class LLMCleanup(Transformation):
     type: Literal["llm-cleanup"] = "llm-cleanup"
     logging_level: LogLevel = LogLevel(INFO)
-    llm_provider: AnyProvider = Field(default_factory=Anthropic)
+    llm_provider: AnyProvider
     _logger: Logger
 
     def model_post_init(self, context: Any, /) -> None:

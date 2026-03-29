@@ -13,8 +13,7 @@ class WordDurationPair(BaseModel):
     duration: float
 
 
-class TimedOutput(Output):
-    type: Literal["timed"] = "timed"
+class TimedOutputBase(Output):
     path: Path
     duration_calculator: AnyDurationCalculator = Field(
         default_factory=DefaultDurationCalculator
@@ -33,3 +32,7 @@ class TimedOutput(Output):
                 for word in words
             )
         )
+
+
+class TimedOutput(TimedOutputBase):
+    type: Literal["timed"] = "timed"

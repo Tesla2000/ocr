@@ -1,9 +1,13 @@
 from collections.abc import Iterable
 from typing import Annotated
 from typing import Any
+from typing import cast
 from typing import Literal
 
 from anthropic import AsyncAnthropic
+from anthropic import omit
+from anthropic.types import MessageParam
+from anthropic.types import TextBlock
 from ocr.transfomations.llm_cleanup.provider._base import LLMProvider
 from ocr.transfomations.llm_cleanup.provider.message import Message
 from pydantic import AfterValidator
@@ -39,13 +43,15 @@ class Anthropic(LLMProvider):
         system_content = (
             "\n\n".join(m.content for m in system_messages)
             if system_messages
-            else None
+            else omit
         )
         response = await self._client.messages.create(
             model=self.model,
             max_tokens=self.max_tokens,
             system=system_content,
-            messages=[m.as_dict() for m in user_messages],
+            messages=[cast(MessageParam, m.as_dict()) for m in user_messages],
         )
         text_block = response.content[0]
+        if not isinstance(text_block, TextBlock):
+            raise ValueError(f"Clean call didn't produce {TextBlock.__name__}")
         return str(text_block.text)

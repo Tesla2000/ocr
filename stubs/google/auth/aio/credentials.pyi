@@ -1,0 +1,44 @@
+from collections.abc import Mapping
+
+from google.auth._credentials_base import _BaseCredentials
+from google.auth.transport import Request as _TransportRequest
+
+class Credentials(_BaseCredentials):
+    def __init__(self) -> None: ...
+    async def apply(
+        self, headers: Mapping[str, str], token: str | None = None
+    ) -> None: ...
+    async def refresh(self, request: _TransportRequest) -> None: ...
+    async def before_request(
+        self,
+        request: _TransportRequest,
+        method: str,
+        url: str,
+        headers: Mapping[str, str],
+    ) -> None: ...
+
+class StaticCredentials(Credentials):
+    token: str
+
+    def __init__(self, token: str) -> None: ...
+    async def refresh(self, request: _TransportRequest) -> None: ...
+    async def before_request(
+        self,
+        request: _TransportRequest,
+        method: str,
+        url: str,
+        headers: Mapping[str, str],
+    ) -> None: ...
+
+class AnonymousCredentials(Credentials):
+    async def refresh(self, request: _TransportRequest) -> None: ...
+    async def apply(
+        self, headers: Mapping[str, str], token: str | None = None
+    ) -> None: ...
+    async def before_request(
+        self,
+        request: _TransportRequest,
+        method: str,
+        url: str,
+        headers: Mapping[str, str],
+    ) -> None: ...

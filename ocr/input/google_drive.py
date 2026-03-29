@@ -5,8 +5,8 @@ from typing import Any
 from typing import Literal
 
 from google.oauth2.service_account import Credentials
+from googleapiclient._apis.drive.v3 import DriveResource
 from googleapiclient.discovery import build
-from googleapiclient.discovery import Resource
 from googleapiclient.http import MediaIoBaseDownload
 from ocr.input._base import Input
 from pydantic import AfterValidator
@@ -20,17 +20,16 @@ def _validate_credentials_path(path: Path) -> Path:
     return path
 
 
-class GoogleDriveInput(Input):
-    type: Literal["google-drive"] = "google-drive"
+class GoogleDriveInputBase(Input):
     credentials_path: Annotated[
         Path, AfterValidator(_validate_credentials_path)
     ]
     directory_id: str
     temp_directory: Path = Path(mkdtemp(dir="/dev/shm"))
-    _service: Resource
+    _service: DriveResource
 
     def model_post_init(self, context: Any, /) -> None:
-        credentials = Credentials.from_service_account_file(  # type: ignore[no-untyped-call]
+        credentials = Credentials.from_service_account_file(
             str(self.credentials_path),
             scopes=["https://www.googleapis.com/auth/drive.readonly"],
         )
@@ -63,3 +62,7 @@ class GoogleDriveInput(Input):
                     _, done = downloader.next_chunk()
             image_files.append(file_path)
         return tuple(image_files)
+
+
+class GoogleDriveInput(GoogleDriveInputBase):
+    type: Literal["google-drive"] = "google-drive"

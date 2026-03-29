@@ -2,10 +2,11 @@ from pathlib import Path
 from typing import Literal
 
 from ocr.input.google_drive import GoogleDriveInput
+from ocr.input.google_drive import GoogleDriveInputBase
 
 
-class GoogleDriveDirectoryInput(GoogleDriveInput):
-    type: Literal["google-drive-directory"] = "google-drive-directory"  # type: ignore[assignment]
+class GoogleDriveDirectoryInput(GoogleDriveInputBase):
+    type: Literal["google-drive-directory"] = "google-drive-directory"
 
     def get_images(self) -> tuple[Path, ...]:
         query = f"'{self.directory_id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
