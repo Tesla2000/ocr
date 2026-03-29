@@ -21,6 +21,7 @@ class TimedOutput(Output):
     )
 
     async def _save_results(self, result: str) -> None:
+        self.duration_calculator.reset()
         self.path.parent.mkdir(exist_ok=True, parents=True)
         words = result.split()
         self.path.write_text(

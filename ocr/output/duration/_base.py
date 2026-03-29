@@ -12,3 +12,6 @@ class DurationCalculator(ABC, BaseModel):
     @abstractmethod
     def calculate_duration(self, word: str) -> float:
         pass
+
+    def reset(self) -> None:
+        pass

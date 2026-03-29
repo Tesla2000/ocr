@@ -11,6 +11,7 @@ class TimedSplitOutput(TimedOutput):
     word_splitter: SplitLongWords = Field(default_factory=SplitLongWords)
 
     async def _save_results(self, result: str) -> None:
+        self.duration_calculator.reset()
         self.path.parent.mkdir(exist_ok=True, parents=True)
         words = result.split()
         pairs: list[str] = []

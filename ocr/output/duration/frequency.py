@@ -3,6 +3,7 @@ from typing import Any
 from typing import Literal
 
 from ocr.output.duration._base import DurationCalculator
+from pydantic import Field
 from wordfreq import word_frequency
 
 
@@ -11,7 +12,10 @@ class FrequencyDurationCalculator(DurationCalculator):
     language: str = "pl"
     min_duration: float = 0.5
     max_duration: float = 2.0
-    base_frequency: float = 1e-5
+    base_frequency: float = Field(
+        1e-5,
+        description="The larger, the larger the difference between word frequencies",
+    )
     _word_pattern: re.Pattern[str]
 
     def model_post_init(self, context: Any, /) -> None:

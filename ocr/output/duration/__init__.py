@@ -29,3 +29,15 @@ except ImportError as e:
     _logger.warning(
         f"Package necessary to use frequency duration calculator is not installed, frequency duration is disabled.\n{e}"
     )
+try:
+    from ocr.output.duration.transformer import TransformerDurationCalculator
+
+    AnyDurationCalculator = Annotated[  # type: ignore[assignment, misc]
+        Union[AnyDurationCalculator, TransformerDurationCalculator],
+        Field(discriminator="type"),
+    ]
+    __all__.append("TransformerDurationCalculator")
+except ImportError as e:
+    _logger.warning(
+        f"Package necessary to use transformer duration calculator is not installed, transformer duration is disabled.\n{e}"
+    )
