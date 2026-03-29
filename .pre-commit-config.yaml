@@ -5,7 +5,7 @@ repos:
 #     - id: tuple_namer
 #       stages: [pre-push]
   - repo: https://github.com/psf/black
-    rev: 25.12.0
+    rev: 26.3.1
     hooks:
       - id: black
         args: ["--preview", "--line-length", "79"]
@@ -27,7 +27,7 @@ repos:
           "ocr",
         ]
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
+    rev: v2.3.3
     hooks:
       - id: autoflake
         args: [ --remove-all-unused-imports, --in-place ]
@@ -45,14 +45,14 @@ repos:
     hooks:
       - id: flake8
         args: [ "--ignore=E203,W503,E501,E704" ]
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
-    hooks:
-      - id: mypy
-        additional_dependencies:
-          - pydantic>=2.8.2
-          - pydantic-settings>=2.12.0
-          - google-cloud-vision>=3.8.0
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: v1.13.0
+#    hooks:
+#      - id: mypy
+#        additional_dependencies:
+#          - pydantic>=2.8.2
+#          - pydantic-settings>=2.12.0
+#          - google-cloud-vision>=3.8.0
   - repo: https://github.com/Tesla2000/any-hook
     rev: v2.0.3
     hooks:

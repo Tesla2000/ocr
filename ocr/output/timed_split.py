@@ -7,7 +7,7 @@ from pydantic import Field
 
 
 class TimedSplitOutput(TimedOutput):
-    type: Literal["timed-split"] = "timed-split"  # type: ignore[assignment]
+    type: Literal["timed-split"] = "timed-split"
     word_splitter: SplitLongWords = Field(default_factory=SplitLongWords)
 
     async def _save_results(self, result: str) -> None:

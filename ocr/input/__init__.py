@@ -17,7 +17,7 @@ __all__ = [
 try:
     from ocr.input.google_drive import GoogleDriveInput
 
-    AnyInput = Annotated[  # type: ignore[misc,assignment]
+    AnyInput = Annotated[
         Union[AnyInput, GoogleDriveInput], Field(discriminator="type")
     ]
     __all__.append("GoogleDriveInput")
@@ -28,7 +28,7 @@ except ImportError as e:
 try:
     from ocr.input.google_drive_directory import GoogleDriveDirectoryInput
 
-    AnyInput = Annotated[  # type: ignore[misc,assignment]
+    AnyInput = Annotated[
         Union[AnyInput, GoogleDriveDirectoryInput], Field(discriminator="type")
     ]
     __all__.append("GoogleDriveDirectoryInput")
@@ -39,7 +39,7 @@ except ImportError as e:
 try:
     from ocr.input.pdf import PdfInput
 
-    AnyInput = Annotated[  # type: ignore[misc,assignment]
+    AnyInput = Annotated[
         Union[AnyInput, PdfInput], Field(discriminator="type")
     ]
     __all__.append("PdfInput")

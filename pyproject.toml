@@ -55,3 +55,4 @@ transformers = [
 python_version = "3.11"
 strict = true
 plugins = ["pydantic.mypy"]
+mypy_path = "stubs"
