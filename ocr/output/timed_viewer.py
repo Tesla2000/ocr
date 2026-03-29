@@ -115,7 +115,7 @@ class TimedWordsViewer(Output):
             toggle_button.config(text="Start")
             self._logger.debug("Playback reset")
 
-        def on_space(_: tk.Event) -> None:  # type: ignore[type-arg]
+        def on_space(_: tk.Event) -> None:
             toggle_playback()
 
         def on_speed_change(slider_value: str) -> None:
@@ -173,7 +173,7 @@ class TimedWordsViewer(Output):
         speed_slider.set(wpm_to_slider(words_per_minute))
         speed_slider.pack(side=tk.LEFT, padx=5)
 
-        def on_entry_change(_: tk.Event) -> None:  # type: ignore[type-arg]
+        def on_entry_change(_: tk.Event) -> None:
             try:
                 new_wpm = float(speed_entry.get())
                 clamped_wpm = max(min_wpm, min(max_wpm, new_wpm))

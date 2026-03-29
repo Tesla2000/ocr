@@ -14,7 +14,7 @@ class VisionClient(BaseModel):
 
     def model_post_init(self, context: Any, /) -> None:
         self._client = ImageAnnotatorClient(
-            credentials=Credentials(token=self.token.get_secret_value())  # type: ignore[no-untyped-call]
+            credentials=Credentials(token=self.token.get_secret_value())
         )
 
     def extract_text(self, image_path: Path) -> str:

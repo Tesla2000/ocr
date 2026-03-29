@@ -23,7 +23,7 @@ __all__ = [
 try:
     from ocr.transfomations.split_long_words import SplitLongWords
 
-    AnyTransformation = Annotated[  # type: ignore[misc]
+    AnyTransformation = Annotated[
         Union[AnyTransformation, SplitLongWords], Field(discriminator="type")
     ]
     __all__.append("SplitLongWords")
@@ -34,7 +34,7 @@ except ImportError as e:
 try:
     from ocr.transfomations.llm_cleanup import LLMCleanup
 
-    AnyTransformation = Annotated[  # type: ignore[misc]
+    AnyTransformation = Annotated[
         Union[AnyTransformation, LLMCleanup], Field(discriminator="type")
     ]
     __all__.append("LLMCleanup")

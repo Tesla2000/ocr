@@ -27,7 +27,7 @@ AnyTimedOutput: TypeAlias = Annotated[
 try:
     from ocr.output.google_drive import GoogleDriveOutput
 
-    AnyOutput = Annotated[  # type: ignore[misc]
+    AnyOutput = Annotated[
         Union[AnyOutput, GoogleDriveOutput], Field(discriminator="type")
     ]
     __all__.append("GoogleDriveOutput")
@@ -38,10 +38,10 @@ except ImportError as e:
 try:
     from ocr.output.timed_split import TimedSplitOutput
 
-    AnyOutput = Annotated[  # type: ignore[misc]
+    AnyOutput = Annotated[
         Union[AnyOutput, TimedSplitOutput], Field(discriminator="type")
     ]
-    AnyTimedOutput = Annotated[  # type: ignore[assignment, misc]
+    AnyTimedOutput = Annotated[
         Union[AnyTimedOutput, TimedSplitOutput], Field(discriminator="type")
     ]
     __all__.append("TimedSplitOutput")
@@ -52,7 +52,7 @@ except ImportError as e:
 try:
     from ocr.output.timed_viewer import TimedWordsViewer
 
-    AnyOutput = Annotated[  # type: ignore[misc]
+    AnyOutput = Annotated[
         Union[AnyOutput, TimedWordsViewer], Field(discriminator="type")
     ]
     __all__.append("TimedWordsViewer")

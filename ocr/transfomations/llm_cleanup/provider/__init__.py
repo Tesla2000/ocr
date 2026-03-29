@@ -14,22 +14,22 @@ try:
         Anthropic,
     )
 
-    AnyProvider = Annotated[Union[Anthropic], Field(discriminator="type")]  # type: ignore[misc]
+    AnyProvider = Annotated[Union[Anthropic], Field(discriminator="type")]
     __all__.append("Anthropic")
 except ImportError as e:
     _logger.warning(
         f"Package necessary to use Anthropic provider is not installed, Anthropic is disabled.\n{e}"
     )
-    AnyProvider = None  # type: ignore[misc]
+    AnyProvider = None
 try:
     from ocr.transfomations.llm_cleanup.provider.openai import OpenAI
 
     if AnyProvider is not None:
-        AnyProvider = Annotated[  # type: ignore[misc]
+        AnyProvider = Annotated[
             Union[AnyProvider, OpenAI], Field(discriminator="type")
         ]
     else:
-        AnyProvider = Annotated[Union[OpenAI], Field(discriminator="type")]  # type: ignore[misc]
+        AnyProvider = Annotated[Union[OpenAI], Field(discriminator="type")]
     __all__.append("OpenAI")
 except ImportError as e:
     _logger.warning(

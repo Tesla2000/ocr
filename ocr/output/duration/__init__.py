@@ -20,7 +20,7 @@ __all__ = [
 try:
     from ocr.output.duration.frequency import FrequencyDurationCalculator
 
-    AnyDurationCalculator = Annotated[  # type: ignore[assignment, misc]
+    AnyDurationCalculator = Annotated[
         Union[AnyDurationCalculator, FrequencyDurationCalculator],
         Field(discriminator="type"),
     ]
@@ -32,7 +32,7 @@ except ImportError as e:
 try:
     from ocr.output.duration.transformer import TransformerDurationCalculator
 
-    AnyDurationCalculator = Annotated[  # type: ignore[assignment, misc]
+    AnyDurationCalculator = Annotated[
         Union[AnyDurationCalculator, TransformerDurationCalculator],
         Field(discriminator="type"),
     ]
