@@ -10,11 +10,9 @@ from pydantic_settings import SettingsConfigDict
 class OCR(BaseSettings, TransformationsApplier):
     model_config = SettingsConfigDict(
         env_file=".env",
-        env_file_encoding="utf-8",
         env_nested_delimiter="__",
         cli_parse_args=True,
         cli_kebab_case=True,
-        cli_ignore_unknown_args=False,
     )
 
     input: AnyInput

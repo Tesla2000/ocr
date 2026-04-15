@@ -1,17 +1,22 @@
-import logging
+from __future__ import annotations
+
 import math
 import tkinter as tk
 from collections.abc import Sequence
-from logging import Logger
+from typing import Any
 from typing import Literal
+from typing import TYPE_CHECKING
 
-from ocr.output import AnyTimedOutput
 from ocr.output._base import Output
 from ocr.output.timed import WordDurationPair
+from pydantic_logger import PydanticLogger
+
+if TYPE_CHECKING:
+    from ocr.output import AnyTimedOutput
 
 
 class TimedWordsViewer(Output):
-    _logger: Logger = logging.getLogger(__name__)
+    logger: PydanticLogger = PydanticLogger(name=__name__)
     type: Literal["timed-viewer"] = "timed-viewer"
     timed_output: AnyTimedOutput
     reload: bool = False
@@ -19,10 +24,10 @@ class TimedWordsViewer(Output):
     async def _save_results(self, result: str) -> None:
         output_file = self.timed_output.path
         if self.reload or not output_file.exists():
-            self._logger.info(f"Generating timed output to {output_file}")
+            self.logger.info(f"Generating timed output to {output_file}")
             await self.timed_output.save_results(result)
         else:
-            self._logger.info(
+            self.logger.info(
                 f"Loading existing timed output from {output_file}"
             )
         timed_words = tuple(
@@ -31,14 +36,14 @@ class TimedWordsViewer(Output):
                 output_file.read_text().splitlines(),
             )
         )
-        self._logger.info(f"Loaded {len(timed_words)} words for RSVP display")
-        self._logger.info(
+        self.logger.info(f"Loaded {len(timed_words)} words for RSVP display")
+        self.logger.info(
             f"Total duration of text is {sum(w.duration for w in timed_words)}"
         )
         self._display_gui(timed_words)
 
     def _display_gui(self, timed_words: Sequence[WordDurationPair]) -> None:
-        self._logger.info("Starting RSVP viewer GUI")
+        self.logger.info("Starting RSVP viewer GUI")
         root = tk.Tk()
         root.title("RSVP Reader")
         root.geometry("800x600")
@@ -81,7 +86,7 @@ class TimedWordsViewer(Output):
             nonlocal current_index
             if current_index >= len(timed_words):
                 word_label.config(text="Done")
-                self._logger.info("Playback completed")
+                self.logger.info("Playback completed")
                 return
             pair = timed_words[current_index]
             word_label.config(text=pair.word)
@@ -97,12 +102,12 @@ class TimedWordsViewer(Output):
             nonlocal is_playing, current_index
             if is_playing:
                 is_playing = False
-                self._logger.debug("Playback paused")
+                self.logger.debug("Playback paused")
             else:
                 is_playing = True
                 if current_index >= len(timed_words):
                     current_index = 0
-                self._logger.debug("Playback started")
+                self.logger.debug("Playback started")
                 show_next_word()
             toggle_button.config(text="Pause" if is_playing else "Start")
 
@@ -113,9 +118,9 @@ class TimedWordsViewer(Output):
             word_label.config(text="")
             progress_label.config(text="")
             toggle_button.config(text="Start")
-            self._logger.debug("Playback reset")
+            self.logger.debug("Playback reset")
 
-        def on_space(_: tk.Event) -> None:  # type: ignore[type-arg]
+        def on_space(_: tk.Event[Any]) -> None:
             toggle_playback()
 
         def on_speed_change(slider_value: str) -> None:
@@ -123,7 +128,7 @@ class TimedWordsViewer(Output):
             words_per_minute = slider_to_wpm(float(slider_value))
             speed_entry.delete(0, tk.END)
             speed_entry.insert(0, str(int(words_per_minute)))
-            self._logger.debug(
+            self.logger.debug(
                 f"Speed changed to {int(words_per_minute)} WPM via slider"
             )
 
@@ -173,7 +178,7 @@ class TimedWordsViewer(Output):
         speed_slider.set(wpm_to_slider(words_per_minute))
         speed_slider.pack(side=tk.LEFT, padx=5)
 
-        def on_entry_change(_: tk.Event) -> None:  # type: ignore[type-arg]
+        def on_entry_change(_: tk.Event[Any]) -> None:
             try:
                 new_wpm = float(speed_entry.get())
                 clamped_wpm = max(min_wpm, min(max_wpm, new_wpm))
@@ -182,7 +187,7 @@ class TimedWordsViewer(Output):
                 speed_entry.delete(0, tk.END)
                 speed_entry.insert(0, str(int(clamped_wpm)))
                 speed_slider.set(wpm_to_slider(clamped_wpm))
-                self._logger.debug(
+                self.logger.debug(
                     f"Speed changed to {int(words_per_minute)} WPM via entry"
                 )
             except ValueError:

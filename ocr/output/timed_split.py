@@ -1,13 +1,13 @@
 from typing import Literal
 
-from ocr.output.timed import TimedOutput
+from ocr.output.timed import TimedOutputBase
 from ocr.output.timed import WordDurationPair
 from ocr.transfomations.split_long_words import SplitLongWords
 from pydantic import Field
 
 
-class TimedSplitOutput(TimedOutput):
-    type: Literal["timed-split"] = "timed-split"  # type: ignore[assignment]
+class TimedSplitOutput(TimedOutputBase):
+    type: Literal["timed-split"] = "timed-split"
     word_splitter: SplitLongWords = Field(default_factory=SplitLongWords)
 
     async def _save_results(self, result: str) -> None:

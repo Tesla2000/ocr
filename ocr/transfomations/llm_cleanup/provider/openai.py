@@ -1,11 +1,13 @@
 from collections.abc import Iterable
 from typing import Annotated
 from typing import Any
+from typing import cast
 from typing import Literal
 
 from ocr.transfomations.llm_cleanup.provider._base import LLMProvider
 from ocr.transfomations.llm_cleanup.provider.message import Message
 from openai import AsyncOpenAI
+from openai.types.chat import ChatCompletionUserMessageParam
 from pydantic import AfterValidator
 from pydantic import SecretStr
 
@@ -33,7 +35,10 @@ class OpenAI(LLMProvider):
     async def clean(self, messages: Iterable[Message]) -> str:
         response = await self._client.chat.completions.create(
             model=self.model,
-            messages=[m.as_dict() for m in messages],
+            messages=[
+                cast(ChatCompletionUserMessageParam, m.as_dict())
+                for m in messages
+            ],
         )
         content = response.choices[0].message.content
         if not isinstance(content, str):
