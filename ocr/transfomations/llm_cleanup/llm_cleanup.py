@@ -25,7 +25,7 @@ class LLMCleanup(Transformation):
     llm_provider: AnyProvider
     _logger: Logger
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         self._logger = getLogger("llm_cleanup")
         self._logger.setLevel(self.logging_level)
 

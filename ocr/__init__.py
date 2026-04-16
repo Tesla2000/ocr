@@ -23,7 +23,7 @@ class LoggingSettings(BaseSettings):
     )
     log_level: LogLevel = LogLevel.INFO
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         logging.basicConfig(
             level=self.log_level.value,
             format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

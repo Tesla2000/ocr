@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 from pathlib import Path
 from tempfile import mkdtemp
 from typing import Annotated
 from typing import Any
 from typing import Literal
+from typing import TYPE_CHECKING
 
 from google.oauth2.service_account import Credentials
-from googleapiclient._apis.drive.v3 import DriveResource
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 from ocr.input._base import Input
 from pydantic import AfterValidator
+
+if TYPE_CHECKING:
+    from googleapiclient._apis.drive.v3 import DriveResource
 
 
 def _validate_credentials_path(path: Path) -> Path:
@@ -28,7 +33,7 @@ class GoogleDriveInputBase(Input):
     temp_directory: Path = Path(mkdtemp(dir="/dev/shm"))
     _service: DriveResource
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         credentials = Credentials.from_service_account_file(
             str(self.credentials_path),
             scopes=["https://www.googleapis.com/auth/drive.readonly"],

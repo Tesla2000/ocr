@@ -20,7 +20,7 @@ class SplitLongWords(Transformation):
     lang: str = "pl_PL"
     _dic: Pyphen
 
-    def model_post_init(self, __context: Any) -> None:
+    def model_post_init(self, _: Any) -> None:
         self._dic = Pyphen(lang=self.lang)
 
     async def transform(self, text: str) -> str:

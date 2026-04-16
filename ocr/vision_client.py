@@ -12,7 +12,7 @@ class VisionClient(BaseModel):
     token: SecretStr
     _client: ImageAnnotatorClient
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         self._client = ImageAnnotatorClient(
             credentials=Credentials(token=self.token.get_secret_value())
         )

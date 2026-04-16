@@ -1,5 +1,5 @@
 from collections.abc import Hashable
-from typing import Any, TypeVar, overload
+from typing import TypeVar, overload
 
 _Key = TypeVar("_Key", bound=Hashable)
 _Value = TypeVar("_Value")

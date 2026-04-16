@@ -30,7 +30,7 @@ class Anthropic(LLMProvider):
     model: str = "claude-haiku-4-5"
     max_tokens: PositiveInt = 64000
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         self._client = AsyncAnthropic(
             api_key=self.anthropic_api_key.get_secret_value(),
             timeout=self.timeout,

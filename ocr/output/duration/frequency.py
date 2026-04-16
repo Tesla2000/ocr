@@ -18,7 +18,7 @@ class FrequencyDurationCalculator(DurationCalculator):
     )
     _word_pattern: re.Pattern[str]
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         self._word_pattern = re.compile(r"\w+")
 
     def calculate_duration(self, word: str) -> float:

@@ -26,7 +26,7 @@ class OpenAI(LLMProvider):
     _client: AsyncOpenAI
     model: str = "gpt-5-nano"
 
-    def model_post_init(self, context: Any, /) -> None:
+    def model_post_init(self, _: Any, /) -> None:
         self._client = AsyncOpenAI(
             api_key=self.openai_api_key.get_secret_value(),
             timeout=self.timeout,
