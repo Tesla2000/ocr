@@ -1,7 +1,6 @@
 import abc
 import datetime
 from collections.abc import Coroutine, Mapping, Sequence
-from typing import Any
 
 import google
 import google.auth
@@ -34,11 +33,11 @@ class Credentials(
     ) -> None: ...
     @classmethod
     def from_service_account_info(
-        cls, info: Mapping[str, str], **kwargs: Any
+        cls, info: Mapping[str, str], **kwargs: object
     ) -> Credentials: ...
     @classmethod
     def from_service_account_file(
-        cls, filename: str, **kwargs: Any
+        cls, filename: str, **kwargs: object
     ) -> Credentials: ...
     @property
     def service_account_email(self) -> str: ...
@@ -90,11 +89,11 @@ class IDTokenCredentials(
     ) -> None: ...
     @classmethod
     def from_service_account_info(
-        cls, info: Mapping[str, str], **kwargs: Any
+        cls, info: Mapping[str, str], **kwargs: object
     ) -> IDTokenCredentials: ...
     @classmethod
     def from_service_account_file(
-        cls, filename: str, **kwargs: Any
+        cls, filename: str, **kwargs: object
     ) -> IDTokenCredentials: ...
     def with_target_audience(
         self, target_audience: str
@@ -108,7 +107,7 @@ class IDTokenCredentials(
 
     def refresh(
         self, request: google.auth.transport.Request
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...
     @property
     def service_account_email(self) -> str: ...
     def sign_bytes(self, message: bytes) -> bytes: ...

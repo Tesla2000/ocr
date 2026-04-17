@@ -1,20 +1,19 @@
 import abc
-from typing import Any
 
 class _BaseAuthorizedSession(metaclass=abc.ABCMeta):
-    credentials: Any
+    credentials: object
 
-    def __init__(self, credentials: Any) -> None: ...
+    def __init__(self, credentials: object) -> None: ...
     @abc.abstractmethod
     def request(
         self,
         method: str,
         url: str,
-        data: Any = None,
-        headers: Any = None,
-        max_allowed_time: Any = None,
+        data: object = None,
+        headers: object = None,
+        max_allowed_time: object = None,
         timeout: float | None = 120,
-        **kwargs: Any,
-    ) -> Any: ...
+        **kwargs: object,
+    ) -> object: ...
     @abc.abstractmethod
     def close(self) -> None: ...

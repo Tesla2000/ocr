@@ -2,7 +2,6 @@ import abc
 import datetime
 from collections.abc import Coroutine, Mapping, Sequence
 from enum import Enum
-from typing import Any
 
 from google.auth._credentials_base import _BaseCredentials
 from google.auth.crypt import Signer as _Signer
@@ -30,7 +29,7 @@ class Credentials(_BaseCredentials, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def refresh(
         self, request: _TransportRequest
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...
     def apply(
         self, headers: Mapping[str, str], token: str | None = ...
     ) -> None: ...
@@ -40,7 +39,7 @@ class Credentials(_BaseCredentials, metaclass=abc.ABCMeta):
         method: str,
         url: str,
         headers: Mapping[str, str],
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...
     def with_non_blocking_refresh(self) -> None: ...
 
 class CredentialsWithQuotaProject(Credentials, metaclass=abc.ABCMeta):
@@ -66,7 +65,7 @@ class CredentialsWithTrustBoundary(Credentials, metaclass=abc.ABCMeta):
     ) -> None: ...
     def refresh(
         self, request: _TransportRequest
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...
 
 class AnonymousCredentials(Credentials):
     @property
@@ -83,7 +82,7 @@ class AnonymousCredentials(Credentials):
         method: str,
         url: str,
         headers: Mapping[str, str],
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...
 
 class ReadOnlyScoped(metaclass=abc.ABCMeta):
     def __init__(self) -> None: ...

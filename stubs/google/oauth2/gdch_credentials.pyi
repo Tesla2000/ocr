@@ -1,6 +1,5 @@
 import datetime
 from collections.abc import Mapping
-from typing import Any
 
 import google
 import google.auth
@@ -25,11 +24,11 @@ class ServiceAccountCredentials(credentials.Credentials):
     ) -> None: ...
     @classmethod
     def from_service_account_info(
-        cls, info: Mapping[str, str], **kwargs: Any
+        cls, info: Mapping[str, str], **kwargs: object
     ) -> ServiceAccountCredentials: ...
     @classmethod
     def from_service_account_file(
-        cls, filename: str, **kwargs: Any
+        cls, filename: str, **kwargs: object
     ) -> ServiceAccountCredentials: ...
     def refresh(self, request: google.auth.transport.Request) -> None: ...
     def with_gdch_audience(

@@ -1,6 +1,5 @@
 from collections.abc import AsyncGenerator, Callable, Mapping
 from contextlib import asynccontextmanager
-from typing import Any
 
 from google.auth.aio import transport
 from google.auth.aio.credentials import Credentials
@@ -10,7 +9,7 @@ class ClientTimeout: ...
 AIOHTTP_INSTALLED: bool
 
 @asynccontextmanager
-def timeout_guard(timeout: float) -> AsyncGenerator[Any]: ...
+def timeout_guard(timeout: float) -> AsyncGenerator[object]: ...
 
 class AsyncAuthorizedSession:
     def __init__(
@@ -31,7 +30,7 @@ class AsyncAuthorizedSession:
         max_allowed_time: float = ...,
         timeout: float | ClientTimeout = ...,
         total_attempts: int | None = ...,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> transport.Response: ...
     async def get(
         self,
@@ -41,7 +40,7 @@ class AsyncAuthorizedSession:
         max_allowed_time: float = ...,
         timeout: float | ClientTimeout = ...,
         total_attempts: int | None = ...,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> transport.Response: ...
     async def post(
         self,
@@ -51,7 +50,7 @@ class AsyncAuthorizedSession:
         max_allowed_time: float = ...,
         timeout: float | ClientTimeout = ...,
         total_attempts: int | None = ...,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> transport.Response: ...
     async def put(
         self,
@@ -61,7 +60,7 @@ class AsyncAuthorizedSession:
         max_allowed_time: float = ...,
         timeout: float | ClientTimeout = ...,
         total_attempts: int | None = ...,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> transport.Response: ...
     async def patch(
         self,
@@ -71,7 +70,7 @@ class AsyncAuthorizedSession:
         max_allowed_time: float = ...,
         timeout: float | ClientTimeout = ...,
         total_attempts: int | None = ...,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> transport.Response: ...
     async def delete(
         self,
@@ -81,7 +80,7 @@ class AsyncAuthorizedSession:
         max_allowed_time: float = ...,
         timeout: float | ClientTimeout = ...,
         total_attempts: int | None = ...,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> transport.Response: ...
     @property
     def is_mtls(self) -> bool: ...

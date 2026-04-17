@@ -1,10 +1,9 @@
 from collections.abc import Mapping
-from typing import Any
 
 from google.auth import transport
 
 class Response(transport.Response):
-    def __init__(self, response: Any) -> None: ...
+    def __init__(self, response: object) -> None: ...
     @property
     def status(self) -> int: ...
     @property
@@ -20,5 +19,5 @@ class Request(transport.Request):
         body: bytes | None = None,
         headers: Mapping[str, str] | None = None,
         timeout: float | None = None,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> Response: ...

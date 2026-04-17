@@ -1,6 +1,5 @@
 import abc
 from collections.abc import Mapping
-from typing import Any
 
 from google.auth import external_account
 
@@ -19,17 +18,17 @@ class Credentials(external_account.Credentials, metaclass=abc.ABCMeta):
         audience: str,
         subject_token_type: str,
         token_url: str,
-        credential_source: Mapping[str, Any] | None = None,
-        *args: Any,
-        **kwargs: Any,
+        credential_source: Mapping[str, object] | None = None,
+        *args: object,
+        **kwargs: object,
     ) -> None: ...
-    def retrieve_subject_token(self, request: Any) -> Any: ...
-    def revoke(self, request: Any) -> None: ...
+    def retrieve_subject_token(self, request: object) -> str: ...
+    def revoke(self, request: object) -> None: ...
     @property
     def external_account_id(self) -> str | None: ...
     @classmethod
     def from_info(
-        cls, info: Mapping[str, Any], **kwargs: Any
+        cls, info: Mapping[str, object], **kwargs: object
     ) -> Credentials: ...
     @classmethod
-    def from_file(cls, filename: str, **kwargs: Any) -> Credentials: ...
+    def from_file(cls, filename: str, **kwargs: object) -> Credentials: ...

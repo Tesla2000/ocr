@@ -1,7 +1,6 @@
 import abc
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any
 
 from google.auth import external_account
 
@@ -25,17 +24,17 @@ class RequestSigner:
 class AwsSecurityCredentialsSupplier(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_aws_security_credentials(
-        self, context: Any, request: Any
+        self, context: object, request: object
     ) -> AwsSecurityCredentials: ...
     @abc.abstractmethod
-    def get_aws_region(self, context: Any, request: Any) -> str: ...
+    def get_aws_region(self, context: object, request: object) -> str: ...
 
 class _DefaultAwsSecurityCredentialsSupplier(AwsSecurityCredentialsSupplier):
-    def __init__(self, credential_source: Mapping[str, Any]) -> None: ...
+    def __init__(self, credential_source: Mapping[str, object]) -> None: ...
     def get_aws_security_credentials(
-        self, context: Any, request: Any
+        self, context: object, request: object
     ) -> AwsSecurityCredentials: ...
-    def get_aws_region(self, context: Any, request: Any) -> str: ...
+    def get_aws_region(self, context: object, request: object) -> str: ...
 
 class Credentials(external_account.Credentials, metaclass=abc.ABCMeta):
     def __init__(
@@ -43,17 +42,17 @@ class Credentials(external_account.Credentials, metaclass=abc.ABCMeta):
         audience: str,
         subject_token_type: str,
         token_url: str = "https://sts.googleapis.com/v1/token",
-        credential_source: Mapping[str, Any] | None = None,
+        credential_source: Mapping[str, object] | None = None,
         aws_security_credentials_supplier: (
             AwsSecurityCredentialsSupplier | None
         ) = None,
-        *args: Any,
-        **kwargs: Any,
+        *args: object,
+        **kwargs: object,
     ) -> None: ...
-    def retrieve_subject_token(self, request: Any) -> str: ...
+    def retrieve_subject_token(self, request: object) -> str: ...
     @classmethod
     def from_info(
-        cls, info: Mapping[str, Any], **kwargs: Any
+        cls, info: Mapping[str, object], **kwargs: object
     ) -> Credentials: ...
     @classmethod
-    def from_file(cls, filename: str, **kwargs: Any) -> Credentials: ...
+    def from_file(cls, filename: str, **kwargs: object) -> Credentials: ...

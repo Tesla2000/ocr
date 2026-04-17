@@ -1,5 +1,4 @@
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 from google.auth.api_key import Credentials as _ApiKeyCredentials
 from google.auth.credentials import Credentials as Credentials
@@ -13,7 +12,7 @@ def load_credentials_from_file(
     request: Request | None = None,
 ) -> tuple[Credentials, str | None]: ...
 def load_credentials_from_dict(
-    info: Mapping[str, Any],
+    info: Mapping[str, object],
     scopes: Sequence[str] | None = None,
     default_scopes: Sequence[str] | None = None,
     quota_project_id: str | None = None,

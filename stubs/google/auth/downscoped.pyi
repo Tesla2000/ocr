@@ -1,6 +1,5 @@
 import datetime
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 import google
 import google.auth
@@ -14,7 +13,7 @@ class CredentialAccessBoundary:
     @rules.setter
     def rules(self, value: list[AccessBoundaryRule]) -> None: ...
     def add_rule(self, rule: AccessBoundaryRule) -> None: ...
-    def to_json(self) -> Mapping[str, Any]: ...
+    def to_json(self) -> Mapping[str, object]: ...
 
 class AccessBoundaryRule:
     def __init__(
@@ -37,7 +36,7 @@ class AccessBoundaryRule:
     def availability_condition(
         self, value: AvailabilityCondition | None
     ) -> None: ...
-    def to_json(self) -> Mapping[str, Any]: ...
+    def to_json(self) -> Mapping[str, object]: ...
 
 class AvailabilityCondition:
     def __init__(

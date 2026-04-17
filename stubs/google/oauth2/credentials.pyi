@@ -1,6 +1,5 @@
 import datetime
 from collections.abc import Coroutine, Mapping, Sequence
-from typing import Any
 
 import google
 import google.auth
@@ -26,7 +25,7 @@ class Credentials(
         quota_project_id: str | None = None,
         expiry: datetime.datetime | None = None,
         rapt_token: str | None = None,
-        refresh_handler: Any | None = None,
+        refresh_handler: object | None = None,
         enable_reauth_refresh: bool = False,
         granted_scopes: Sequence[str] | None = None,
         trust_boundary: Mapping[str, str] | None = None,
@@ -52,9 +51,9 @@ class Credentials(
     @property
     def rapt_token(self) -> str | None: ...
     @property
-    def refresh_handler(self) -> Any | None: ...
+    def refresh_handler(self) -> object | None: ...
     @refresh_handler.setter
-    def refresh_handler(self, value: Any | None) -> None: ...
+    def refresh_handler(self, value: object | None) -> None: ...
     @property
     def account(self) -> str: ...
     def get_cred_info(self) -> Mapping[str, str] | None: ...
@@ -66,7 +65,7 @@ class Credentials(
     def with_universe_domain(self, universe_domain: str) -> Credentials: ...
     def refresh(
         self, request: google.auth.transport.Request
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...
     @classmethod
     def from_authorized_user_info(
         cls, info: Mapping[str, str], scopes: Sequence[str] | None = None

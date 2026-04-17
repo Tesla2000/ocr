@@ -6,7 +6,7 @@ from google.auth.aio import transport
 ClientTimeout: TypeAlias = Any
 
 class Response(transport.Response):
-    def __init__(self, response: Any) -> None: ...
+    def __init__(self, response: object) -> None: ...
     @property
     def status_code(self) -> int: ...
     @property
@@ -18,7 +18,7 @@ class Response(transport.Response):
     async def close(self) -> None: ...
 
 class Request(transport.Request):
-    def __init__(self, session: Any | None = None) -> None: ...
+    def __init__(self, session: object | None = None) -> None: ...
     async def __call__(
         self,
         url: str,
@@ -26,7 +26,7 @@ class Request(transport.Request):
         body: bytes | None = None,
         headers: Mapping[str, str] | None = None,
         timeout: float | ClientTimeout = ...,
-        *args: Any,
-        **kwargs: Any,
+        *args: object,
+        **kwargs: object,
     ) -> transport.Response: ...
     async def close(self) -> None: ...

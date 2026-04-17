@@ -1,6 +1,5 @@
 import datetime
 from collections.abc import Mapping
-from typing import Any
 
 from google.auth.transport import Request as _Request
 
@@ -19,12 +18,12 @@ def get(
     headers: Mapping[str, str] | None = None,
     return_none_for_not_found_error: bool = False,
     timeout: int = 3,
-) -> Mapping[str, Any] | str: ...
+) -> Mapping[str, object] | str: ...
 def get_project_id(request: _Request) -> str | None: ...
 def get_universe_domain(request: _Request) -> str: ...
 def get_service_account_info(
     request: _Request, service_account: str = "default"
-) -> Mapping[str, Any]: ...
+) -> Mapping[str, object]: ...
 def get_service_account_token(
     request: _Request,
     service_account: str = "default",

@@ -1,7 +1,6 @@
 import abc
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any
 
 import google
 import google.auth
@@ -25,7 +24,7 @@ class Credentials(
         audience: str,
         subject_token_type: str,
         token_url: str,
-        credential_source: Mapping[str, Any],
+        credential_source: Mapping[str, object],
         service_account_impersonation_url: str | None = None,
         service_account_impersonation_options: Mapping[str, str] | None = None,
         client_id: str | None = None,
@@ -39,7 +38,7 @@ class Credentials(
         trust_boundary: Mapping[str, str] | None = None,
     ) -> None: ...
     @property
-    def info(self) -> Mapping[str, Any]: ...
+    def info(self) -> Mapping[str, object]: ...
     @property
     def service_account_email(self) -> str | None: ...
     @property
@@ -76,7 +75,7 @@ class Credentials(
     ) -> Credentials: ...
     @classmethod
     def from_info(
-        cls, info: Mapping[str, Any], **kwargs: Any
+        cls, info: Mapping[str, object], **kwargs: object
     ) -> Credentials: ...
     @classmethod
-    def from_file(cls, filename: str, **kwargs: Any) -> Credentials: ...
+    def from_file(cls, filename: str, **kwargs: object) -> Credentials: ...

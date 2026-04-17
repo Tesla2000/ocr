@@ -7,7 +7,6 @@ from collections.abc import (
     MutableMapping,
     Sequence,
 )
-from typing import Any
 from typing_extensions import Self
 
 import requests
@@ -27,11 +26,11 @@ class _Response(transport.Response):
     def data(self) -> bytes: ...
 
 class TimeoutGuard:
-    remaining_timeout: Any
+    remaining_timeout: object
 
     def __init__(
         self,
-        timeout: Any,
+        timeout: object,
         timeout_error_type: type[Exception] = requests.exceptions.Timeout,
     ) -> None: ...
     def __enter__(self) -> Self: ...
@@ -54,27 +53,27 @@ class Request(transport.Request):
         body: bytes | None = None,
         headers: Mapping[str, str] | None = None,
         timeout: float | None = None,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> _Response: ...
 
 class _MutualTlsAdapter(requests.adapters.HTTPAdapter):
     def __init__(self, cert: bytes, key: bytes) -> None: ...
-    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None: ...
-    def proxy_manager_for(self, *args: Any, **kwargs: Any) -> Any: ...
+    def init_poolmanager(self, *args: object, **kwargs: object) -> None: ...
+    def proxy_manager_for(self, *args: object, **kwargs: object) -> object: ...
 
 class _MutualTlsOffloadAdapter(requests.adapters.HTTPAdapter):
-    signer: Any
+    signer: object
 
     def __init__(self, enterprise_cert_file_path: str) -> None: ...
-    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None: ...
-    def proxy_manager_for(self, *args: Any, **kwargs: Any) -> Any: ...
+    def init_poolmanager(self, *args: object, **kwargs: object) -> None: ...
+    def proxy_manager_for(self, *args: object, **kwargs: object) -> object: ...
 
 class AuthorizedSession(requests.Session):
-    credentials: Any
+    credentials: object
 
     def __init__(
         self,
-        credentials: Any,
+        credentials: object,
         refresh_status_codes: Sequence[int] = ...,
         max_refresh_attempts: int = ...,
         refresh_timeout: float | None = None,
@@ -82,7 +81,7 @@ class AuthorizedSession(requests.Session):
         default_host: str | None = None,
     ) -> None: ...
     def configure_mtls_channel(
-        self, client_cert_callback: Any | None = None
+        self, client_cert_callback: object | None = None
     ) -> None: ...
     def request(
         self,
@@ -112,9 +111,9 @@ class AuthorizedSession(requests.Session):
             | str
             | bytes
             | SupportsRead[str | bytes]
-            | list[tuple[Any, Any]]
-            | tuple[tuple[Any, Any], ...]
-            | Mapping[Any, Any]
+            | list[tuple[object, object]]
+            | tuple[tuple[object, object], ...]
+            | Mapping[object, object]
             | None
         ) = ...,
         headers: Mapping[str, str | bytes | None] | None = ...,
@@ -172,15 +171,15 @@ class AuthorizedSession(requests.Session):
         hooks: (
             Mapping[
                 str,
-                Iterable[Callable[[Response], Any]]
-                | Callable[[Response], Any],
+                Iterable[Callable[[Response], object]]
+                | Callable[[Response], object],
             ]
             | None
         ) = ...,
         stream: bool | None = ...,
         verify: bool | str | None = ...,
         cert: str | tuple[str, str] | None = ...,
-        json: Any | None = ...,
+        json: object | None = ...,
     ) -> Response: ...
     @property
     def is_mtls(self) -> bool: ...

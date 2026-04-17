@@ -1,6 +1,5 @@
 import abc
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 DEFAULT_RETRYABLE_STATUS_CODES: Sequence[int]
 DEFAULT_REFRESH_STATUS_CODES: Sequence[int]
@@ -26,5 +25,5 @@ class Request(metaclass=abc.ABCMeta):
         body: bytes | None = None,
         headers: Mapping[str, str] | None = None,
         timeout: float | None = None,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> Response: ...

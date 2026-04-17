@@ -1,6 +1,5 @@
 import abc
 from collections.abc import AsyncGenerator, Mapping, Sequence
-from typing import Any
 
 DEFAULT_RETRYABLE_STATUS_CODES: Sequence[int]
 DEFAULT_MAX_RETRY_ATTEMPTS: int
@@ -28,6 +27,6 @@ class Request(metaclass=abc.ABCMeta):
         body: bytes | None,
         headers: Mapping[str, str] | None,
         timeout: float,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> Response: ...
     async def close(self) -> None: ...

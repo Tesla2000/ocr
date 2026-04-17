@@ -1,12 +1,11 @@
 import datetime
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 import google
 import google.auth
 import google.auth.transport
 from google.auth import credentials
-from google.auth.crypt import Signer as _Signer
+from google.auth.crypt.base import Signer
 
 class Credentials(
     credentials.Scoped,
@@ -35,7 +34,7 @@ class Credentials(
     @property
     def service_account_email(self) -> str: ...
     @property
-    def signer(self) -> _Signer: ...
+    def signer(self) -> Signer: ...
     @property
     def requires_scopes(self) -> bool: ...
     def get_cred_info(self) -> Mapping[str, str] | None: ...
@@ -53,7 +52,7 @@ class Credentials(
     @classmethod
     def from_impersonated_service_account_info(
         cls: type[Credentials],
-        info: Mapping[str, Any],
+        info: Mapping[str, object],
         scopes: Sequence[str] | None = None,
     ) -> Credentials: ...
     def _build_trust_boundary_lookup_url(self) -> str: ...
@@ -92,7 +91,7 @@ class IDTokenCredentials(
 
     def refresh(self, request: google.auth.transport.Request) -> None: ...
     @property
-    def signer(self) -> Any: ...
+    def signer(self) -> Signer: ...
     def sign_bytes(self, message: bytes) -> bytes: ...
     @property
     def service_account_email(self) -> str: ...

@@ -1,12 +1,12 @@
 import datetime
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 import google
 import google.auth
 import google.auth.crypt
 import google.auth.transport
 from google.auth import credentials
+from google.auth.crypt.base import Signer
 
 _TRUST_BOUNDARY_LOOKUP_ENDPOINT = ...
 
@@ -79,7 +79,7 @@ class IDTokenCredentials(
 
     def refresh(self, request: google.auth.transport.Request) -> None: ...
     @property
-    def signer(self) -> Any: ...
+    def signer(self) -> Signer: ...
     def sign_bytes(self, message: bytes) -> bytes: ...
     @property
     def service_account_email(self) -> str: ...

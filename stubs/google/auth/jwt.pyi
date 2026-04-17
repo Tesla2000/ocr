@@ -1,5 +1,5 @@
+import datetime
 from collections.abc import Coroutine, Mapping
-from typing import Any
 
 from google.auth import credentials as _credentials
 from google.auth.crypt import Signer as _Signer
@@ -34,7 +34,7 @@ def decode(
 class Credentials(
     _credentials.Signing, _credentials.CredentialsWithQuotaProject
 ):
-    expiry: Any
+    expiry: datetime.datetime | None
 
     def __init__(
         self,
@@ -48,19 +48,19 @@ class Credentials(
     ) -> None: ...
     @classmethod
     def _from_signer_and_info(
-        cls, signer: _Signer, info: Mapping[str, str], **kwargs: Any
+        cls, signer: _Signer, info: Mapping[str, str], **kwargs: object
     ) -> Credentials: ...
     @classmethod
     def from_service_account_info(
-        cls, info: Mapping[str, str], **kwargs: Any
+        cls, info: Mapping[str, str], **kwargs: object
     ) -> Credentials: ...
     @classmethod
     def from_service_account_file(
-        cls, filename: str, **kwargs: Any
+        cls, filename: str, **kwargs: object
     ) -> Credentials: ...
     @classmethod
     def from_signing_credentials(
-        cls, credentials: _credentials.Signing, audience: str, **kwargs: Any
+        cls, credentials: _credentials.Signing, audience: str, **kwargs: object
     ) -> Credentials: ...
     def with_claims(
         self,
@@ -72,7 +72,7 @@ class Credentials(
     def with_quota_project(
         self, quota_project_id: str | None
     ) -> Credentials: ...
-    def refresh(self, request: Any) -> None: ...
+    def refresh(self, request: object) -> None: ...
     def sign_bytes(self, message: bytes) -> bytes: ...
     @property
     def signer_email(self) -> str: ...
@@ -96,15 +96,15 @@ class OnDemandCredentials(
     ) -> None: ...
     @classmethod
     def from_service_account_info(
-        cls, info: Mapping[str, str], **kwargs: Any
+        cls, info: Mapping[str, str], **kwargs: object
     ) -> OnDemandCredentials: ...
     @classmethod
     def from_service_account_file(
-        cls, filename: str, **kwargs: Any
+        cls, filename: str, **kwargs: object
     ) -> OnDemandCredentials: ...
     @classmethod
     def from_signing_credentials(
-        cls, credentials: _credentials.Signing, **kwargs: Any
+        cls, credentials: _credentials.Signing, **kwargs: object
     ) -> OnDemandCredentials: ...
     def with_claims(
         self,
@@ -117,10 +117,14 @@ class OnDemandCredentials(
     ) -> OnDemandCredentials: ...
     @property
     def valid(self) -> bool: ...
-    def refresh(self, request: Any) -> None: ...
+    def refresh(self, request: object) -> None: ...
     def before_request(
-        self, request: Any, method: str, url: str, headers: Mapping[str, str]
-    ) -> None | Coroutine[Any, Any, None]: ...
+        self,
+        request: object,
+        method: str,
+        url: str,
+        headers: Mapping[str, str],
+    ) -> None | Coroutine[object, object, None]: ...
     def sign_bytes(self, message: bytes) -> bytes: ...
     @property
     def signer_email(self) -> str: ...

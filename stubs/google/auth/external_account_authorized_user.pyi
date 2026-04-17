@@ -1,6 +1,5 @@
 import datetime
 from collections.abc import Mapping, Sequence
-from typing import Any
 
 import google
 import google.auth
@@ -73,10 +72,10 @@ class Credentials(
     ) -> Credentials: ...
     @classmethod
     def from_info(
-        cls, info: Mapping[str, Any], **kwargs: Any
+        cls, info: Mapping[str, object], **kwargs: object
     ) -> Credentials: ...
     @classmethod
-    def from_file(cls, filename: str, **kwargs: Any) -> Credentials: ...
+    def from_file(cls, filename: str, **kwargs: object) -> Credentials: ...
     def _build_trust_boundary_lookup_url(self) -> str: ...
     def _perform_refresh_token(
         self, request: google.auth.transport.Request

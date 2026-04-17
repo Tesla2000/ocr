@@ -1,6 +1,5 @@
 import abc
 from collections.abc import Coroutine
-from typing import Any
 
 from google.auth.transport import Request as _TransportRequest
 
@@ -11,4 +10,4 @@ class _BaseCredentials(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def refresh(
         self, request: _TransportRequest
-    ) -> None | Coroutine[Any, Any, None]: ...
+    ) -> None | Coroutine[object, object, None]: ...

@@ -3,7 +3,6 @@ import ssl
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 from requests import PreparedRequest, Response
 from requests.adapters import HTTPAdapter
@@ -27,10 +26,13 @@ class MdsMtlsAdapter(HTTPAdapter):
     ssl_context: ssl.SSLContext
 
     def __init__(
-        self, mds_mtls_config: MdsMtlsConfig = ..., *args: Any, **kwargs: Any
+        self,
+        mds_mtls_config: MdsMtlsConfig = ...,
+        *args: object,
+        **kwargs: object,
     ) -> None: ...
-    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None: ...
-    def proxy_manager_for(self, *args: Any, **kwargs: Any) -> None: ...
+    def init_poolmanager(self, *args: object, **kwargs: object) -> None: ...
+    def proxy_manager_for(self, *args: object, **kwargs: object) -> None: ...
     def send(
         self,
         request: PreparedRequest,

@@ -1,6 +1,5 @@
 import types
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any
 from typing_extensions import Self
 
 import requests
@@ -10,10 +9,10 @@ from google.auth import transport
 class _RequestMethodsBase: ...
 
 RequestMethods = _RequestMethodsBase
-_LOGGER: Any = None
+_LOGGER: object = None
 
 class _Response(transport.Response):
-    def __init__(self, response: Any) -> None: ...
+    def __init__(self, response: object) -> None: ...
     @property
     def status(self) -> int: ...
     @property
@@ -22,11 +21,11 @@ class _Response(transport.Response):
     def data(self) -> bytes: ...
 
 class TimeoutGuard:
-    remaining_timeout: Any
+    remaining_timeout: object
 
     def __init__(
         self,
-        timeout: Any,
+        timeout: object,
         timeout_error_type: type[Exception] = requests.exceptions.Timeout,
     ) -> None: ...
     def __enter__(self) -> Self: ...
@@ -38,9 +37,9 @@ class TimeoutGuard:
     ) -> None: ...
 
 class Request(transport.Request):
-    http: Any
+    http: object
 
-    def __init__(self, http: Any | None = None) -> None: ...
+    def __init__(self, http: object | None = None) -> None: ...
     def __del__(self) -> None: ...
     def __call__(
         self,
@@ -49,29 +48,29 @@ class Request(transport.Request):
         body: bytes | None = None,
         headers: Mapping[str, str] | None = None,
         timeout: float | None = None,
-        **kwargs: Any,
+        **kwargs: object,
     ) -> _Response: ...
 
 class _MutualTlsAdapter(requests.adapters.HTTPAdapter):
     def __init__(self, cert: bytes, key: bytes) -> None: ...
-    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None: ...
-    def proxy_manager_for(self, *args: Any, **kwargs: Any) -> Any: ...
+    def init_poolmanager(self, *args: object, **kwargs: object) -> None: ...
+    def proxy_manager_for(self, *args: object, **kwargs: object) -> object: ...
 
 class _MutualTlsOffloadAdapter(requests.adapters.HTTPAdapter):
-    signer: Any
+    signer: object
 
     def __init__(self, enterprise_cert_file_path: str) -> None: ...
-    def init_poolmanager(self, *args: Any, **kwargs: Any) -> None: ...
-    def proxy_manager_for(self, *args: Any, **kwargs: Any) -> Any: ...
+    def init_poolmanager(self, *args: object, **kwargs: object) -> None: ...
+    def proxy_manager_for(self, *args: object, **kwargs: object) -> object: ...
 
 class AuthorizedHttp(RequestMethods):
-    http: Any
-    credentials: Any
+    http: object
+    credentials: object
 
     def __init__(
         self,
-        credentials: Any,
-        http: Any | None = None,
+        credentials: object,
+        http: object | None = None,
         refresh_status_codes: Sequence[int] = ...,
         max_refresh_attempts: int = ...,
         default_host: str | None = None,
@@ -84,11 +83,11 @@ class AuthorizedHttp(RequestMethods):
         self,
         method: str,
         url: str,
-        body: Any = None,
-        headers: Any = None,
-        **kwargs: Any,
+        body: object = None,
+        headers: object = None,
+        **kwargs: object,
     ) -> _Response: ...
-    def __enter__(self) -> Any: ...
+    def __enter__(self) -> object: ...
     def __exit__(
         self,
         exc_type: type[BaseException] | None,
